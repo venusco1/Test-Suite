@@ -1,0 +1,254 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+{% block title %}Test Suite Manager{% endblock title %}
+
+{% block style %} <link rel="stylesheet" href="{% static "css/home.css" %}"> {% endblock style %}
+
+{% block nav_links %}
+
+{% endblock nav_links %}
+
+{% block content %}
+
+<!-- TOP BAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm top-navbar">
+    <div class="container-fluid">
+        <span class="navbar-brand fw-bold fs-5">
+            <i class="bi bi-diagram-2 me-2 text-primary"></i>Test Suite Manager
+        </span>
+
+        <div class="d-flex align-items-center gap-3 ms-auto">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small text-muted">
+                    <li class="breadcrumb-item">TestCase</li>
+                    <li class="breadcrumb-item active">Action</li>
+                </ol>
+            </nav>
+            <button class="btn btn-primary btn-sm rounded-2 px-3">
+                <i class="bi bi-plus-circle me-1"></i>Generate Test Case
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row vh-100 mt-3">
+
+        <!-- TOOL PANEL -->
+        <aside class="col-2 bg-white border-end tool-panel d-flex flex-column">
+            <!-- Header Section -->
+            <div class="p-3 border-bottom">
+                <h5 class="fw-bold text-dark mb-0">
+                    <i class="bi bi-tools me-2"></i>Tools
+                </h5>
+            </div>
+
+            <!-- Search Section -->
+            <div class="p-3 border-bottom">
+                <input 
+                    class="form-control form-control-sm" 
+                    type="text"
+                    placeholder="Search tools..." 
+                    aria-label="Search tools">
+            </div>
+
+            <!-- Tools List Section -->
+            <div class="flex-grow-1 overflow-y-auto p-2">
+                <div class="list-group list-group-flush">
+                    <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1" title="Read data from channel">
+                        <i class="bi bi-arrow-down-circle me-2 text-primary"></i>
+                        <span class="small fw-500">Read</span>
+                    </button>
+                    <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1" title="Write data to channel">
+                        <i class="bi bi-arrow-up-circle me-2 text-info"></i>
+                        <span class="small fw-500">Write</span>
+                    </button>
+                    <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1" title="Execute background job">
+                        <i class="bi bi-hourglass-split me-2 text-warning"></i>
+                        <span class="small fw-500">Job</span>
+                    </button>
+                    <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1" title="Perform calculation">
+                        <i class="bi bi-calculator me-2 text-success"></i>
+                        <span class="small fw-500">Calculation</span>
+                    </button>
+                    <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1" title="Conditional logic">
+                        <i class="bi bi-diagram-3 me-2 text-danger"></i>
+                        <span class="small fw-500">If</span>
+                    </button>
+                    <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2" title="Loop control">
+                        <i class="bi bi-arrow-repeat me-2 text-secondary"></i>
+                        <span class="small fw-500">Loop</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- GRAPHICAL EDIT WINDOW -->
+        <main class="col-7 bg-white position-relative d-flex flex-column editor-main">
+            <!-- Toolbar -->
+            <div class="editor-toolbar border-bottom px-3 py-2 d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-secondary rounded-2" title="Go back">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary rounded-2" title="Undo action">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary rounded-2" title="Redo action">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+                <div class="vr mx-2"></div>
+                <span class="small text-muted">Graphical Test Editor</span>
+            </div>
+
+            <!-- Graph Area -->
+            <div class="graph-area flex-grow-1 overflow-auto">
+                <!-- TestCase -->
+                {% comment %} <div class="node test-case">
+                    <div class="node-title">TestCase</div>
+
+                    <div class="node child">
+                        <strong>PreCondition</strong><br>
+                        Vehicle_Speed = 0
+                    </div>
+                </div>
+
+                <div class="d-flex gap-4 mt-4">
+                    <!-- Action 1 -->
+                    <div class="node action">
+                        <div class="node-title">Action</div>
+                        <div class="node child">Read<br>Channel: SPEED = 0</div>
+                    </div>
+
+                    <!-- Action 2 -->
+                    <div class="node action">
+                        <div class="node-title">Action</div>
+                        <div class="node child">Read<br>Channel: SPEED = 0</div>
+
+                        <div class="node child mt-2">Loop<br>Times = 5</div>
+                        <div class="node child">Calculate<br>speed_diff</div>
+                        <div class="node child">Write<br>SPEED</div>
+                        <div class="node end-loop">EndLoop</div>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+        </main>
+
+        <!-- RIGHT PANEL -->
+        <aside class="col-3 bg-white border-start d-flex flex-column right-panel">
+            <!-- XML Tree Section -->
+            <div class="border-bottom p-3">
+                <h6 class="fw-bold text-dark mb-3 d-flex align-items-center">
+                    <i class="bi bi-diagram-3-fill me-2 text-info"></i>XML Tree
+                    <span class="ms-auto badge bg-light text-dark small">View</span>
+                </h6>
+                <div class="xml-tree-container">
+                    <ul class="xml-tree">
+                        <li>
+                            <div class="tree-node" onclick="toggleNode(this)">
+                                <i class="bi bi-chevron-down tree-toggle"></i>
+                                <i class="bi bi-diagram-2 me-1 text-warning"></i>
+                                <span class="tree-label">TestCase</span>
+                            </div>
+                            <ul class="tree-children">
+                                <li>
+                                    <div class="tree-node">
+                                        <i class="bi bi-dash"></i>
+                                        <i class="bi bi-gear me-1 text-danger"></i>
+                                        <span class="tree-label">PreCondition</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="tree-node" onclick="toggleNode(this)">
+                                        <i class="bi bi-chevron-down tree-toggle"></i>
+                                        <i class="bi bi-play-circle me-1 text-success"></i>
+                                        <span class="tree-label">Action</span>
+                                    </div>
+                                    <ul class="tree-children">
+                                        <li>
+                                            <div class="tree-node">
+                                                <i class="bi bi-dash"></i>
+                                                <i class="bi bi-arrow-down me-1 text-primary"></i>
+                                                <span class="tree-label">Read</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="tree-node">
+                                                <i class="bi bi-dash"></i>
+                                                <i class="bi bi-arrow-repeat me-1 text-info"></i>
+                                                <span class="tree-label">Loop</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="tree-node">
+                                                <i class="bi bi-dash"></i>
+                                                <i class="bi bi-calculator me-1 text-success"></i>
+                                                <span class="tree-label">Calculate</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="tree-node">
+                                                <i class="bi bi-dash"></i>
+                                                <i class="bi bi-arrow-up me-1 text-info"></i>
+                                                <span class="tree-label">Write</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- XML Code Editor Section -->
+            <div class="p-3 d-flex flex-column flex-grow-1 xml-code-section">
+                <h6 class="fw-bold text-dark mb-2 d-flex align-items-center">
+                    <i class="bi bi-code-square me-2 text-success"></i>XML Code
+                    <span class="ms-auto badge bg-light text-dark small">Edit</span>
+                </h6>
+                <div class="xml-editor-wrapper flex-grow-1">
+                    <textarea class="xml-editor" spellcheck="false">&lt;TestCase&gt;
+  &lt;PreCondition Vehicle_Speed="0"/&gt;
+  &lt;Action&gt;
+    &lt;Read Channel="SPEED"/&gt;
+    &lt;Loop Times="5"&gt;
+      &lt;Calculate speed_diff="..."/&gt;
+      &lt;Write Channel="SPEED"/&gt;
+    &lt;/Loop&gt;
+  &lt;/Action&gt;
+&lt;/TestCase&gt;</textarea>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+</div>
+
+
+<script>
+    function toggleNode(element) {
+        const parent = element.closest('li');
+        const childrenList = parent.querySelector('.tree-children');
+        const toggle = element.querySelector('.tree-toggle');
+        
+        if (childrenList) {
+            childrenList.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+    }
+
+    // Initialize toggle states
+    document.querySelectorAll('.tree-toggle').forEach(toggle => {
+        const parent = toggle.closest('li');
+        const children = parent.querySelector('.tree-children');
+        if (children) {
+            // Start with expanded state
+            children.classList.remove('collapsed');
+            toggle.classList.remove('collapsed');
+        }
+    });
+</script>
+
+{% endblock content %}

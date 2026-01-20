@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+   <TestSuite Name="Sessions">
+      <TestCase Name="RA_Sanity">
+         <PreCondition>
+            <Block ModelType="ReferancedModel" Name="TestEnvReset">
+               <Block ModelType="Subsystem" Name="StartCanoeSimulationIfNotAlready">
+                  <Job BlockPath="TestEnvReset/StartCanoeSimulationIfNotAlready/JOB" EvaluationEnable="0" MappingName="CANoeCANalyzer01.IsMeasurementRunning" SaveEnable="1" SaveVariable="MEASUREMENT_STATE"/>
+                  <IfThenElse BlockPath="TestEnvReset/StartCanoeSimulationIfNotAlready/IfThenElse" Value="MEASUREMENT_STATE == 0">
+                     <ThenBranch>
+                        <Job BlockPath="TestEnvReset/StartCanoeSimulationIfNotAlready/JOB1" EvaluationEnable="0" MappingName="CANoeCANalyzer01.StartMeasurement" SaveEnable="0"/>
+                        <Wait BlockPath="TestEnvReset/StartCanoeSimulationIfNotAlready/Wait" Time="5" TimeType="numeric" Unit="s"/>
+                     </ThenBranch>
+                  </IfThenElse>
+               </Block>
+               <Block ModelType="Subsystem" Name="DeleteErrors">
+                  <Job BlockPath="TestEnvReset/Delete Errors/Reset_Error_1" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">1</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;1041ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete Errors/Reset_Error_2" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">2</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;2041ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete Errors/Reset_Error_3" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">3</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;3041ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete Errors/Reset_Error_4" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">4</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;4041ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete Errors/Reset_Error_5" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">5</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;5041ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete Errors/Reset_Error_6" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">6</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;6041ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete Errors/Reset_Error_7" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">7</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;7041ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete Errors/Reset_Error_8" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">8</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;8041ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+               </Block>
+               <Block ModelType="Subsystem" Name="DeleteMinMax">
+                  <Job BlockPath="TestEnvReset/Delete MinMax/Reset_Error_1" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">1</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;1042ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete MinMax/Reset_Error_2" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">2</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;2042ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete MinMax/Reset_Error_3" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">3</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;3042ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete MinMax/Reset_Error_4" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">4</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;4042ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete MinMax/Reset_Error_5" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">5</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;5042ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete MinMax/Reset_Error_6" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">6</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;6042ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete MinMax/Reset_Error_7" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">7</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;7042ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Job BlockPath="TestEnvReset/Delete MinMax/Reset_Error_8" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">8</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;8042ffff&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+               </Block>
+               <Block ModelType="Subsystem" Name="Reset_Push_Buttons">
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB1" MappingName="PB_1/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB2" MappingName="PB_1/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB3" MappingName="PB_3/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB4" MappingName="PB_4/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB5" MappingName="PB_5/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB6" MappingName="PB_6/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB7" MappingName="PB_7/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB8" MappingName="PB_8/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB9" MappingName="PB_9/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB10" MappingName="PB_10/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB11" MappingName="PB_11/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB12" MappingName="PB_12/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB13" MappingName="PDL_1/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB14" MappingName="PDL_2/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB15" MappingName="PDL_3/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB16" MappingName="PDL_4/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB17" MappingName="PDL_5/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB18" MappingName="PDL_6/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/PB19" MappingName="ROT_1/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/ROT2" MappingName="ROT_2/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/ROT3" MappingName="ROT_3/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/ROT4" MappingName="ROT_4/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/Reset_Push_Buttons/ROT5" MappingName="ROT_5/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+               </Block>
+               <Block ModelType="Subsystem" Name="Plant_Model_Reset">
+                  <Block ModelType="Subsystem" Name="HIL_Override_resets">
+                     <Write BlockPath="TestEnvReset/Plant_Model_Reset/HIL_Override_resets/Disable_CAN_IL_GLOBAL_OVERRIDE" MappingName="bILGlobalOverride/CANOverride/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  </Block>
+                  <Block ModelType="Subsystem" Name="SOC_RESET">
+                     <Write BlockPath="TestEnvReset/Plant_Model_Reset/SOC_RESET/Reset_SOCInit" MappingName="rSOCInit/RESS/Vehicle" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="99" ValueType="numeric" ValuesIn="Physical conversion"/>
+                     <Write BlockPath="TestEnvReset/Plant_Model_Reset/SOC_RESET/Reset_SOC1" MappingName="bResetSOC/RESS/Vehicle" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                     <Wait BlockPath="TestEnvReset/Plant_Model_Reset/SOC_RESET/Switch_Wait" Time="500" TimeType="numeric" Unit="ms"/>
+                     <Write BlockPath="TestEnvReset/Plant_Model_Reset/SOC_RESET/Reset_Rsoc2" MappingName="bResetSOC/RESS/Vehicle" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  </Block>
+                  <Block ModelType="MaskedReferance" N_TIMING_LOOP="41" Name="TriggerTransponder">
+                     <Write BlockPath="TriggerTransponder/Write" MappingName="NTimingLoopFIA/xTransponderInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="41" ValueType="numeric" ValuesIn="Physical conversion"/>
+                     <Read BlockPath="TriggerTransponder/Read" EvaluationEnable="1" EvaluationOperation="==" EvaluationType="Numeric" EvaluationValue="41" MappingName="NTimingLoopFIAPrimary/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" ToleranceType="none" Unit="NA" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  </Block>
+                  <Block ModelType="Subsystem" Name="FIA_MODEL_RESET">
+                     <Write BlockPath="TestEnvReset/Plant_Model_Reset/FIA_MODEL_RESET/FIA_reset" MappingName="BFIAReset/FIA" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                     <Wait BlockPath="TestEnvReset/Plant_Model_Reset/FIA_MODEL_RESET/switch_wait" Time="500" TimeType="numeric" Unit="ms"/>
+                     <Write BlockPath="TestEnvReset/Plant_Model_Reset/FIA_MODEL_RESET/FIA_reset_2" MappingName="BFIAReset/FIA" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                     <Write BlockPath="TestEnvReset/Plant_Model_Reset/FIA_MODEL_RESET/Write1" MappingName="ERaceAvailable/FIA" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="38.5" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  </Block>
+               </Block>
+               <Block ModelType="Subsystem" Name="Driver_Input_Resets">
+                  <Read BlockPath="TestEnvReset/Driver_Input_Resets/Read_PitLimiter" EvaluationEnable="0" MappingName="BPitLimiterEnable/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="1" SaveVariable="PLSL" Unit="NA" ValuesIn="Physical conversion"/>
+                  <IfThenElse BlockPath="TestEnvReset/Driver_Input_Resets/Check_if_PLSL_Enable" Value="PLSL==1">
+                     <ThenBranch>
+                        <Read BlockPath="TestEnvReset/Driver_Input_Resets/Read_PLSL_button_number" EvaluationEnable="0" MappingName="NPLSLButton/SCALAR" MappingNameType="direct" MappingType="SM" SaveEnable="1" SaveVariable="NPLSL" Unit="NA" ValuesIn="Physical conversion"/>
+                        <Read BlockPath="TestEnvReset/Driver_Input_Resets/Read_PLSL_button_Debounce" EvaluationEnable="0" MappingName="tPLSLOnSwDebounce/SCALAR" MappingNameType="direct" MappingType="SM" SaveEnable="1" SaveVariable="T_PLSL_DEBOUNCE_MS" Unit="NA" ValuesIn="Physical conversion"/>
+                        <Calc BlockPath="TestEnvReset/Driver_Input_Resets/Convert_Debouns_ms_2_Sec" CalcName="ExampleCalculation" CalcNameType="direct" EvaluationEnable="0" Expression="T_PLSL_DEBOUNCE_MS * 1000" SaveEnable="1" SaveVariable="T_PLSL_DEBOUNCE_SEC"/>
+                        <Block BUTTON="NPLSL" ModelType="MaskedReferance" Name="PressButton" TIME="T_PLSL_DEBOUNCE_SEC">
+                           <IfThenElse BlockPath="PressButton/Block_1" Value="NPLSL==1">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB1">
+                                    <Write BlockPath="PressButton/Press_PB1/PB1_1" MappingName="PB_1/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB1/Wait_for_TIME" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB1/Validate_DIG01" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG01&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB1/PB1_2" MappingName="PB_1/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_2" Value="NPLSL==2">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB2">
+                                    <Write BlockPath="PressButton/Press_PB2/Write" MappingName="PB_2/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB2/wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB2/Validate_DIG2" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG02&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB2/release" MappingName="PB_2/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_3" Value="NPLSL==3">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB3">
+                                    <Write BlockPath="PressButton/Press_PB3/press" MappingName="PB_3/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB3/wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB3/wait_until_Sysmon_Update" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG03&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB3/release" MappingName="PB_3/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_4" Value="NPLSL==4">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB4">
+                                    <Write BlockPath="PressButton/Press_PB4/Write" MappingName="PB_4/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB4/wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB4/Validate_DIG04" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG04&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB4/Release" MappingName="PB_4/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_5" Value="NPLSL==5">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB5">
+                                    <Write BlockPath="PressButton/Press_PB5/Write" MappingName="PB_5/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB5/wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB5/Validate_DIG5" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG05&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB5/Release" MappingName="PB_5/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_6" Value="NPLSL==6">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB6">
+                                    <Write BlockPath="PressButton/Press_PB6/Write" MappingName="PB_6/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB6/wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB6/Validate_DIG6" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG06&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB6/Release" MappingName="PB_6/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_7" Value="NPLSL==7">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB7">
+                                    <Write BlockPath="PressButton/Press_PB7/Write" MappingName="PB_7/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB7/wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB7/Validate_DIG7" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG07&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB7/Release" MappingName="PB_7/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_8" Value="NPLSL==8">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB8">
+                                    <Write BlockPath="PressButton/Press_PB8/Write" MappingName="PB_8/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB8/Wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB8/Validate_DIG08" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG08&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB8/Release" MappingName="PB_8/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_9" Value="NPLSL==9">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB9">
+                                    <Write BlockPath="PressButton/Press_PB9/Write" MappingName="PB_9/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB9/Wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB9/Validate_DIG09" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG09&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB9/Release" MappingName="PB_9/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_10" Value="NPLSL==10">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB10">
+                                    <Write BlockPath="PressButton/Press_PB10/Write" MappingName="PB_10/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB10/Wait" Time="T_PLSL_DEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB10/Validate_DIG10" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG10&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB10/Release" MappingName="PB_10/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                        </Block>
+                        <Read BlockPath="TestEnvReset/Driver_Input_Resets/Validate_PLSL" EvaluationEnable="1" EvaluationOperation="==" EvaluationType="Numeric" EvaluationValue="0" MappingName="BPitLimiterEnable/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="1" SaveVariable="PLSL" TimeOptionType="Wait until true" TimeoutValue="3000" ToleranceType="none" Unit="NA" ValueType="numeric" ValuesIn="Physical conversion"/>
+                     </ThenBranch>
+                  </IfThenElse>
+                  <Read BlockPath="TestEnvReset/Driver_Input_Resets/Read_StartLatch" EvaluationEnable="0" MappingName="BStartLatched/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="1" SaveVariable="LATCH" Unit="NA" ValuesIn="Physical conversion"/>
+                  <IfThenElse BlockPath="TestEnvReset/Driver_Input_Resets/Check_If_start_latch_enabled" Value="LATCH==1">
+                     <ThenBranch>
+                        <Read BlockPath="TestEnvReset/Driver_Input_Resets/Read_Debounce_time_for_start_latch" EvaluationEnable="0" MappingName="tStartButtonDebounce/SCALAR" MappingNameType="direct" MappingType="SM" SaveEnable="1" SaveVariable="LATCHDEBOUNCE_SEC" Unit="NA" ValuesIn="Physical conversion"/>
+                        <Read BlockPath="TestEnvReset/Driver_Input_Resets/Read_Nstart_Button" EvaluationEnable="0" MappingName="NStartButton/SCALAR" MappingNameType="direct" MappingType="SM" SaveEnable="1" SaveVariable="NSTART" Unit="NA" ValuesIn="Physical conversion"/>
+                        <Block BUTTON="NSTART" ModelType="MaskedReferance" Name="PressButton" TIME="LATCHDEBOUNCE_SEC">
+                           <IfThenElse BlockPath="PressButton/Block_1" Value="NSTART==1">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB1">
+                                    <Write BlockPath="PressButton/Press_PB1/PB1_1" MappingName="PB_1/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB1/Wait_for_TIME" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB1/Validate_DIG01" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG01&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB1/PB1_2" MappingName="PB_1/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_2" Value="NSTART==2">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB2">
+                                    <Write BlockPath="PressButton/Press_PB2/Write" MappingName="PB_2/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB2/wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB2/Validate_DIG2" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG02&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB2/release" MappingName="PB_2/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_3" Value="NSTART==3">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB3">
+                                    <Write BlockPath="PressButton/Press_PB3/press" MappingName="PB_3/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB3/wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB3/wait_until_Sysmon_Update" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG03&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB3/release" MappingName="PB_3/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_4" Value="NSTART==4">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB4">
+                                    <Write BlockPath="PressButton/Press_PB4/Write" MappingName="PB_4/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB4/wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB4/Validate_DIG04" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG04&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB4/Release" MappingName="PB_4/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_5" Value="NSTART==5">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB5">
+                                    <Write BlockPath="PressButton/Press_PB5/Write" MappingName="PB_5/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB5/wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB5/Validate_DIG5" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG05&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB5/Release" MappingName="PB_5/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_6" Value="NSTART==6">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB6">
+                                    <Write BlockPath="PressButton/Press_PB6/Write" MappingName="PB_6/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB6/wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB6/Validate_DIG6" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG06&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB6/Release" MappingName="PB_6/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_7" Value="NSTART==7">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB7">
+                                    <Write BlockPath="PressButton/Press_PB7/Write" MappingName="PB_7/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB7/wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB7/Validate_DIG7" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG07&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB7/Release" MappingName="PB_7/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_8" Value="NSTART==8">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB8">
+                                    <Write BlockPath="PressButton/Press_PB8/Write" MappingName="PB_8/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB8/Wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB8/Validate_DIG08" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG08&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB8/Release" MappingName="PB_8/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_9" Value="NSTART==9">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB9">
+                                    <Write BlockPath="PressButton/Press_PB9/Write" MappingName="PB_9/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB9/Wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB9/Validate_DIG09" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG09&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB9/Release" MappingName="PB_9/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                           <IfThenElse BlockPath="PressButton/Block_10" Value="NSTART==10">
+                              <ThenBranch>
+                                 <Block ModelType="Subsystem" Name="Press_PB10">
+                                    <Write BlockPath="PressButton/Press_PB10/Write" MappingName="PB_10/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="1" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                    <Wait BlockPath="PressButton/Press_PB10/Wait" Time="LATCHDEBOUNCE_SEC" TimeType="expression" Unit="ms"/>
+                                    <Read BlockPath="PressButton/Press_PB10/Validate_DIG10" EvaluationEnable="1" EvaluationOperation="identical" EvaluationType="String" EvaluationValue="&amp;apos;DIG10&amp;apos;" MappingName="NSIUSteeringButtonStatus/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2000" Unit="NA" ValueType="string" ValuesIn="Interpreted text"/>
+                                    <Write BlockPath="PressButton/Press_PB10/Release" MappingName="PB_10/SteerWheel/DriverInputs/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+                                 </Block>
+                              </ThenBranch>
+                           </IfThenElse>
+                        </Block>
+                        <Read BlockPath="TestEnvReset/Driver_Input_Resets/Validate_StartLatch_disable" EvaluationEnable="1" EvaluationOperation="==" EvaluationType="Numeric" EvaluationValue="0" MappingName="BStartLatched/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="1" SaveVariable="LATCH" TimeOptionType="Wait until true" TimeoutValue="2000" ToleranceType="none" Unit="NA" ValueType="numeric" ValuesIn="Physical conversion"/>
+                     </ThenBranch>
+                  </IfThenElse>
+               </Block>
+               <Block ModelType="Subsystem" Name="Reset_Laps">
+                  <Job BlockPath="TestEnvReset/Reset_Laps/Reset_nLapNumbers" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">1</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;20af001d0001&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+                  <Read BlockPath="TestEnvReset/Reset_Laps/Verify_nLap_Reset" EvaluationEnable="1" EvaluationOperation="==" EvaluationType="Numeric" EvaluationValue="1" MappingName="NLap/MEAS" MappingNameType="direct" MappingType="SM" SaveEnable="0" TimeOptionType="Wait until true" TimeoutValue="2500" ToleranceType="none" Unit="NA" ValueType="numeric" ValuesIn="Physical conversion"/>
+               </Block>
+               <Block ModelType="Subsystem" Name="Energy_Reset">
+                  <Job BlockPath="TestEnvReset/Energy_Reset/EnergyReset_Single_message" EvaluationEnable="0" MappingName="SystemMonitor01.SendMessage" SaveEnable="0">
+                     <JobParameter Name="AppNo">1</JobParameter>
+                     <JobParameter Name="messageContent">&amp;quot;20af00060001&amp;quot;</JobParameter>
+                     <JobParameter Name="timeout">400</JobParameter>
+                  </Job>
+               </Block>
+               <Block ModelType="Subsystem" Name="HIL_Calib_Changes">
+                  <Write BlockPath="TestEnvReset/HIL_Calib_Changes/SCircuite_set_to_Max" MappingName="sCircuit/SCALAR" MappingNameType="direct" MappingType="SM" Unit="NA" Value="10000" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/HIL_Calib_Changes/Disable_Shakedown_Session" MappingName="BShakeDownSessionActive/SCALAR" MappingNameType="direct" MappingType="SM" Unit="NA" Value="&amp;apos;NO&amp;apos;" ValueType="string" ValuesIn="Interpreted text"/>
+                  <Write BlockPath="TestEnvReset/HIL_Calib_Changes/p2Switch_upper_threshold" MappingName="vP2SwitchONUpperThresh/SCALAR" MappingNameType="direct" MappingType="SM" Unit="NA" Value="2" ValueType="numeric" ValuesIn="Physical conversion"/>
+                  <Write BlockPath="TestEnvReset/HIL_Calib_Changes/p2switch_lower_threshold_for_HIL" MappingName="vP2SwitchOFFLowerThresh/SCALAR" MappingNameType="direct" MappingType="SM" Unit="NA" Value="4" ValueType="numeric" ValuesIn="Physical conversion"/>
+               </Block>
+               <Block ModelType="Subsystem" Name="LoggingStart">
+                  <Write BlockPath="TestEnvReset/LoggingStart/Stop_Canoe_Logging" MappingName="canoe_log_switch/Logging/HIL_Interface" MappingNameType="direct" MappingType="MODEL" Unit="NA" Value="0" ValueType="numeric" ValuesIn="Physical conversion"/>
+               </Block>
+            </Block>
+         </PreCondition>
+         <Action>
+
+         </Action>
+         <PostCondition>
+
+         </PostCondition>
+      </TestCase>
+   </TestSuite>
+</Project>

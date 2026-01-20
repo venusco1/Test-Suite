@@ -1,0 +1,118 @@
+
+www.jamaliyya.com — First-Layer
+
+Navbar on Home Page: 
+
+Logo / Masjid Name 
+│
+├─ Home
+├─ About
+├─ Prayer Times
+├─ Announcements
+├─ Events
+├─ Donations
+├─ Contact
+└─ Login
+
+Home Landing Page Sections:
+
+Home
+│
+├─ Hero Section (Masjid name + short message)
+├─ Today's Prayer Times (Quick view)
+├─ Hijri Date & Islamic Day
+├─ Latest Announcement (1–2 items)
+├─ Upcoming Event Highlight
+├─ Quick Donation Button
+└─ Footer (Address + Contact)
+
+------------------------------------------------
+
+www.jamaliyya.com/about — First-Layer
+ 
+Home - About
+│
+├─ About
+├─ Vision
+├─ History
+├─ Management
+├─ Imam
+├─ Facilities
+├─ Activities
+└─ Invitation
+
+About Us
+│
+├─ About the Masjid
+├─ About the Mahalla
+├─ Vision & Mission
+├─ History & Milestones
+├─ Management Committee
+├─ Imam & Leadership
+├─ Facilities
+├─ Activities & Services
+├─ Values & Governance
+└─ Invitation & Contact
+
+------------------------------------------------
+
+www.jamaliyya.com/prayer — First-Layer
+ 
+Home - Prayer
+│
+├─ Prayer 
+├─ Jumua
+├─ Calendar
+├─ Ramadan
+├─ Imam
+├─ Reminders
+
+
+Prayer
+│
+├─ Today’s Prayer Times
+├─ Jumua (Friday) Prayer Details
+├─ Hijri Date & Islamic Calendar
+├─ Monthly Prayer Timetable
+├─ Ramadan Prayer & Fasting Times (Seasonal)
+├─ Special Prayer Notices
+├─ Notifications & Reminders (Optional)
+
+------------------------------------------------
+
+www.jamaliyya.com/about — First-Layer
+ 
+Home - About
+│
+├─ Upcoming
+├─ Past
+├─ Categories
+
+About Us
+│
+├─ Upcoming Events
+├─ Program Categories
+├─ Past Events & Gallery
+
+
+------------------------------------------------
+
+
+Contact Us
+│
+├─ Contact Details
+├─ Map & Directions
+├─ Contact Form
+├─ Committee Contacts
+├─ Office Info
+├─ Emergency Contacts
+└─ Social Links
+
+
+
+
+
+
+
+
+
