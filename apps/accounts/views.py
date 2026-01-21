@@ -26,10 +26,11 @@ DEFAULT_TESTCASE_XML = """
 
 
 
-# def editor_view(request):
-#     return render(request, "public/editor.html")
 
-def editor_view(request, test_case_id):
+def editor_view(request, test_case_id=None):
+    if test_case_id is None:
+        return render(request, "public/editor.html")
+
     test_case = TestCase.objects.get(id=test_case_id)
 
     return render(request, "public/editor.html", {
@@ -39,17 +40,6 @@ def editor_view(request, test_case_id):
 
 
 
-# def create_test_case(request):
-#     if request.method == "POST":
-#         title = request.POST.get("title")
-
-#         test_case = TestCase.objects.create(
-#             title=title,
-#             xml_content=DEFAULT_TESTCASE_XML
-#         )
-
-#         return render(request, "public/editor.html")
-#     return render(request, "public/editor.html")
 
 from django.shortcuts import redirect
 
