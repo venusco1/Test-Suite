@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}Test Suite Manager{% endblock title %}
+{% block title %}Test Suite Manager - Load{% endblock title %}
 
 {% block style %} <link rel="stylesheet" href="{% static "css/home.css" %}"> {% endblock style %}
 
@@ -295,6 +295,9 @@
                     </div>
                 </div>
             </div>
+
+            <div id="xmlTree"></div>
+            
         </main>
 
         <!-- RIGHT PANEL -->
@@ -308,12 +311,12 @@
                     <span class="ms-auto badge bg-light text-dark small">View</span>
                 </h6>
                 <div class="xml-tree-container">
-                    <ul class="xml-tree">
+                    <ul class="xml-tree" id="xmlTreeRoot">
                         <li>
                             <div class="tree-node" onclick="toggleNode(this)">
                                 <i class="bi bi-chevron-down tree-toggle"></i>
                                 <i class="bi bi-diagram-2 me-1 text-warning"></i>
-                                <span class="tree-label">{{ test_case.title }}</span>
+                                <span class="tree-label"></span>
                             </div>
                             <ul class="tree-children">
                                 <li>
@@ -381,7 +384,9 @@
                 </h6>
 
                 <div class="xml-editor-wrapper flex-grow-1">
-                    <textarea class="xml-editor">{{ xml }}</textarea>
+                    <textarea class="xml-editor form-control" rows="20">
+                    {{ xml_content|default:"<Project>\n</Project>" }}
+                    </textarea>
                 </div>
             </div>
 
@@ -389,6 +394,52 @@
 
     </div>
 </div>
+<script>
+const treeData = {{ tree_data|safe }};
+
+function getIcon(tag) {
+    const icons = {
+        Project: "bi-diagram-3-fill text-info",
+        TestSuite: "bi-folder-fill text-warning",
+        TestCase: "bi-file-earmark-text text-primary",
+        PreCondition: "bi-gear-fill text-danger",
+        Action: "bi-play-circle-fill text-success",
+        PostCondition: "bi-check-circle-fill text-secondary"
+    };
+    return icons[tag] || "bi-circle text-muted";
+}
+
+function buildTree(node) {
+    const hasChildren = node.children && node.children.length > 0;
+
+    let html = `
+        <li>
+            <div class="tree-node" ${hasChildren ? 'onclick="toggleNode(this)"' : ''}>
+                ${hasChildren
+                    ? '<i class="bi bi-chevron-down tree-toggle me-1"></i>'
+                    : '<i class="bi bi-dash me-1"></i>'}
+                <i class="bi ${getIcon(node.tag)} me-1"></i>
+                <span class="tree-label">${node.tag}</span>
+            </div>
+    `;
+
+    if (hasChildren) {
+        html += `<ul class="tree-children">`;
+        node.children.forEach(child => {
+            html += buildTree(child);
+        });
+        html += `</ul>`;
+    }
+
+    html += `</li>`;
+    return html;
+}
+
+if (treeData) {
+    document.getElementById("xmlTreeRoot").innerHTML = buildTree(treeData);
+}
+</script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

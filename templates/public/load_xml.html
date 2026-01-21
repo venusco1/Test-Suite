@@ -1,0 +1,75 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+{% block title %} Load Test Suite XML {% endblock title %}
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'css/load_xml.css' %}">
+
+{% endblock style %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card upload-card shadow-sm border-0">
+        
+        <!-- HEADER -->
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="fw-bold mb-0 d-flex align-items-center">
+                <i class="bi bi-file-earmark-code-fill text-primary me-2"></i>
+                Load XML Test Suite
+            </h5>
+            <small class="text-muted">
+                Upload or paste your XML configuration to continue
+            </small>
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-4">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- FILE UPLOAD -->
+                <label class="fw-semibold mb-2">Upload XML File</label>
+                <label class="upload-zone w-100">
+                    <input type="file" name="xml_file" accept=".xml" hidden>
+                    <i class="bi bi-cloud-arrow-up-fill mb-2"></i>
+                    <p class="mb-1 fw-semibold">Drag & Drop XML File</p>
+                    <small class="text-muted">or click to browse</small>
+                </label>
+
+                <!-- OR DIVIDER -->
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <!-- PASTE XML -->
+                <div class="mb-4">
+                    <label class="fw-semibold mb-2">Paste XML Content</label>
+                    <textarea 
+                        name="xml_text" 
+                        class="form-control"
+                        rows="8"
+                        placeholder="&lt;Project&gt;&#10;    &lt;TestSuite Name=&quot;...&quot;&gt;&#10;        ...&#10;&lt;/Project&gt;">
+                    </textarea>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-play-circle-fill me-1"></i>Load XML
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

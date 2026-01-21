@@ -1,0 +1,886 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Test Suite Manager - Home{% endblock %}
+
+{% block content %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<div class="home-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background">
+            <div class="hero-blob hero-blob-1"></div>
+            <div class="hero-blob hero-blob-2"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-star"></i> Trusted by QA Teams
+            </div>
+            <h1 class="hero-title">Test Suite Manager</h1>
+            <p class="hero-subtitle">Streamline your testing workflow with powerful test management and execution</p>
+            <div class="hero-buttons">
+                <a href="#features" class="btn btn-primary">
+                    <span>Explore Features</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#get-started" class="btn btn-secondary">
+                    <span>Get Started</span>
+                    <i class="fas fa-play"></i>
+                </a>
+            </div>
+            <p class="hero-footer">No credit card required • Free forever plan available</p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-banner">
+        <div class="stat-item">
+            <span class="stat-number">10K+</span>
+            <span class="stat-label">Tests Run Daily</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-number">500+</span>
+            <span class="stat-label">Active Users</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-number">99.9%</span>
+            <span class="stat-label">Uptime</span>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="section-header">
+            <h2>Powerful Features</h2>
+            <p>Everything you need for comprehensive test management</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h3>Test Case Management</h3>
+                <p>Create, organize, and manage your test cases in a centralized location with powerful filtering and search.</p>
+                <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <h3>Test Execution</h3>
+                <p>Execute test cases and track results with detailed reporting, logs, and performance metrics.</p>
+                <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Analytics & Reporting</h3>
+                <p>Get insights into test coverage, execution history, trends, and identify areas for improvement.</p>
+                <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Secure Access</h3>
+                <p>Manage user accounts, control access to test suites, and maintain comprehensive audit logs.</p>
+                <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h3>Continuous Integration</h3>
+                <p>Integrate seamlessly with your CI/CD pipeline for automated test execution and reporting.</p>
+                <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Team Collaboration</h3>
+                <p>Work together with real-time updates, comments, and shared test case repositories.</p>
+                <a href="#" class="feature-link">Learn more <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Started Section -->
+    <section id="get-started" class="get-started-section">
+        <div class="section-header">
+            <h2>Get Started in 3 Steps</h2>
+            <p>Start managing your tests in minutes</p>
+        </div>
+        <div class="get-started-content">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Create Your Account</h3>
+                    <p>Sign up with your email and create your account. It takes less than a minute.</p>
+                </div>
+            </div>
+            <div class="step-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Add Test Cases</h3>
+                    <p>Import or create test cases for your application with our intuitive editor.</p>
+                </div>
+            </div>
+            <div class="step-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Execute & Track</h3>
+                    <p>Run tests and monitor results in real-time with detailed reports and analytics.</p>
+                </div>
+            </div>
+        </div>
+        <div class="get-started-cta">
+            {% if user.is_authenticated %}
+                <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                </a>
+            {% else %}
+                <a href="" class="btn btn-primary btn-lg">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-user-plus"></i> Create Free Account
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Why Choose Test Suite Manager?</h2>
+                <p>Test Suite Manager is a comprehensive tool designed to streamline test management and execution. Whether you're a QA engineer, developer, or part of a testing team, our platform provides the tools you need to ensure quality and reliability.</p>
+                <ul class="about-list">
+                    <li><i class="fas fa-check"></i> Easy to use interface</li>
+                    <li><i class="fas fa-check"></i> Powerful reporting tools</li>
+                    <li><i class="fas fa-check"></i> Seamless integrations</li>
+                    <li><i class="fas fa-check"></i> 24/7 Support</li>
+                </ul>
+            </div>
+            <div class="about-image">
+                <div class="about-illustration">
+                    <i class="fas fa-cube"></i>
+                    <i class="fas fa-cube"></i>
+                    <i class="fas fa-cube"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Testing?</h2>
+            <p>Join thousands of QA teams using Test Suite Manager</p>
+            <a href="#" class="btn btn-primary btn-lg">Start Your Free Trial</a>
+        </div>
+    </section>
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .home-container {
+        width: 100%;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        padding: 80px 20px 60px;
+        position: relative;
+        overflow: hidden;
+        min-height: 550px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+    }
+
+    .hero-blob {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.08;
+    }
+
+    .hero-blob-1 {
+        width: 350px;
+        height: 350px;
+        top: -80px;
+        right: -80px;
+        background: white;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .hero-blob-2 {
+        width: 280px;
+        height: 280px;
+        bottom: -40px;
+        left: -40px;
+        background: white;
+        animation: float 10s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(15px); }
+    }
+
+    .hero-content {
+        text-align: center;
+        color: white;
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 8px 18px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 700;
+        margin-bottom: 25px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-badge i {
+        margin-right: 6px;
+    }
+
+    .hero-title {
+        font-size: 3.5em;
+        font-weight: 800;
+        margin-bottom: 20px;
+        letter-spacing: -0.5px;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25em;
+        margin-bottom: 40px;
+        opacity: 0.95;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: 500;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .hero-footer {
+        font-size: 0.9em;
+        opacity: 0.85;
+        font-weight: 500;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 12px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.95em;
+    }
+
+    .btn-lg {
+        padding: 14px 36px;
+        font-size: 1em;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        border: 2px solid transparent;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+        background: white;
+        color: #6366f1;
+        transform: translateY(-2px);
+        border-color: white;
+    }
+
+    /* Stats Banner */
+    .stats-banner {
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        padding: 40px 20px;
+        margin: -40px 20px 0;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+        position: relative;
+        z-index: 10;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        text-align: center;
+        flex: 1;
+        min-width: 140px;
+    }
+
+    .stat-number {
+        display: block;
+        font-size: 2.2em;
+        font-weight: 800;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 6px;
+    }
+
+    .stat-label {
+        display: block;
+        color: #9ca3af;
+        font-weight: 700;
+        font-size: 0.9em;
+    }
+
+    .stat-divider {
+        width: 1px;
+        height: 50px;
+        background: #e5e7eb;
+        display: none;
+    }
+
+    @media (min-width: 768px) {
+        .stat-divider {
+            display: block;
+        }
+    }
+
+    /* Section Header */
+    .section-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .section-header h2 {
+        font-size: 2.3em;
+        color: #1f2937;
+        margin-bottom: 12px;
+        font-weight: 800;
+    }
+
+    .section-header p {
+        font-size: 1.05em;
+        color: #9ca3af;
+        max-width: 550px;
+        margin: 0 auto;
+        font-weight: 500;
+    }
+
+    /* Features Section */
+    .features-section {
+        padding: 70px 20px;
+        background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+        max-width: 1300px;
+        margin: 0 auto;
+    }
+
+    .feature-card {
+        background: white;
+        padding: 32px 28px;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        border: 1px solid #f0f0f0;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(99, 102, 241, 0.15);
+        border-color: #6366f1;
+    }
+
+    .feature-icon-box {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    }
+
+    .feature-card h3 {
+        font-size: 1.2em;
+        color: #1f2937;
+        margin-bottom: 12px;
+        font-weight: 700;
+    }
+
+    .feature-card p {
+        color: #6b7280;
+        line-height: 1.7;
+        margin-bottom: 16px;
+        font-size: 0.95em;
+    }
+
+    .feature-link {
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.3s ease;
+        font-size: 0.9em;
+    }
+
+    .feature-link:hover {
+        gap: 10px;
+        color: #8b5cf6;
+    }
+
+    /* Get Started Section */
+    .get-started-section {
+        padding: 70px 20px;
+        background: #ffffff;
+    }
+
+    .get-started-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        max-width: 1100px;
+        margin: 0 auto 50px;
+        flex-wrap: wrap;
+    }
+
+    .step-card {
+        background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        padding: 32px 28px;
+        border-radius: 12px;
+        text-align: center;
+        flex: 1;
+        min-width: 240px;
+        position: relative;
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+
+    .step-card:hover {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        transform: translateY(-6px);
+        box-shadow: 0 12px 36px rgba(99, 102, 241, 0.25);
+        border-color: transparent;
+    }
+
+    .step-number {
+        width: 56px;
+        height: 56px;
+        background: white;
+        color: #6366f1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.7em;
+        font-weight: 800;
+        margin: 0 auto 18px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+    }
+
+    .step-card:hover .step-number {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .step-content h3 {
+        font-size: 1.15em;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .step-content p {
+        color: #6b7280;
+        font-size: 0.92em;
+        line-height: 1.6;
+    }
+
+    .step-card:hover .step-content p {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .step-arrow {
+        font-size: 1.6em;
+        color: #d1d5db;
+        min-width: 30px;
+        display: none;
+        transition: all 0.3s ease;
+    }
+
+    @media (min-width: 1024px) {
+        .step-arrow {
+            display: block;
+        }
+    }
+
+    .get-started-cta {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* About Section */
+    .about-section {
+        padding: 70px 20px;
+        background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+    }
+
+    .about-content {
+        max-width: 1300px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: center;
+    }
+
+    .about-text h2 {
+        font-size: 2.2em;
+        color: #1f2937;
+        margin-bottom: 20px;
+        font-weight: 800;
+    }
+
+    .about-text p {
+        color: #6b7280;
+        font-size: 1.02em;
+        line-height: 1.8;
+        margin-bottom: 25px;
+    }
+
+    .about-list {
+        list-style: none;
+    }
+
+    .about-list li {
+        padding: 10px 0;
+        color: #1f2937;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1em;
+    }
+
+    .about-list i {
+        color: #10b981;
+        font-size: 1.1em;
+    }
+
+    .about-illustration {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        font-size: 4.5em;
+        color: #6366f1;
+        opacity: 0.2;
+    }
+
+    .about-illustration i {
+        animation: bounce 2s ease-in-out infinite;
+    }
+
+    .about-illustration i:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .about-illustration i:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .about-illustration i:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        padding: 70px 20px;
+        text-align: center;
+        color: white;
+    }
+
+    .cta-content h2 {
+        font-size: 2.3em;
+        margin-bottom: 12px;
+        font-weight: 800;
+    }
+
+    .cta-content p {
+        font-size: 1.15em;
+        margin-bottom: 30px;
+        opacity: 0.95;
+        font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .hero-title {
+            font-size: 2.8em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15em;
+        }
+
+        .about-content {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .section-header h2 {
+            font-size: 2em;
+        }
+    }
+
+    @media (max-width: 768px) {
+        body {
+            background: #ffffff;
+        }
+
+        .hero-section {
+            padding: 50px 16px 40px;
+            min-height: 420px;
+        }
+
+        .hero-title {
+            font-size: 2.1em;
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 1em;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 11px 24px;
+        }
+
+        .stats-banner {
+            gap: 24px;
+            padding: 28px 16px;
+            margin: -28px 16px 0;
+        }
+
+        .stat-number {
+            font-size: 1.9em;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+        }
+
+        .features-section,
+        .get-started-section,
+        .about-section,
+        .cta-section {
+            padding: 50px 16px;
+        }
+
+        .features-grid {
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .feature-card {
+            padding: 24px 20px;
+        }
+
+        .section-header h2 {
+            font-size: 1.75em;
+        }
+
+        .section-header p {
+            font-size: 0.95em;
+        }
+
+        .get-started-content {
+            gap: 16px;
+            margin-bottom: 35px;
+        }
+
+        .step-card {
+            padding: 22px 18px;
+            min-width: 100%;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            font-size: 1.5em;
+        }
+
+        .step-content h3 {
+            font-size: 1.05em;
+        }
+
+        .cta-content h2 {
+            font-size: 1.75em;
+        }
+
+        .cta-content p {
+            font-size: 1em;
+        }
+
+        .about-text h2 {
+            font-size: 1.8em;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 1.8em;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95em;
+        }
+
+        .hero-badge {
+            font-size: 0.8em;
+            padding: 6px 14px;
+        }
+
+        .stats-banner {
+            gap: 16px;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+        }
+
+        .section-header h2 {
+            font-size: 1.5em;
+        }
+
+        .section-header p {
+            font-size: 0.95em;
+        }
+
+        .feature-card {
+            padding: 25px 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1em;
+        }
+
+        .about-illustration {
+            font-size: 3em;
+        }
+    }
+</style>
+{% endblock %}
