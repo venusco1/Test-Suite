@@ -26,18 +26,35 @@
             </small>
         </div>
 
+        <!-- MESSAGES -->
+        {% if messages %}
+            <div class="card-body pb-2 pt-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="bi {% if message.tags == 'error' %}bi-exclamation-circle-fill{% else %}bi-check-circle-fill{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <!-- BODY -->
         <div class="card-body p-4">
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" id="xmlForm">
                 {% csrf_token %}
 
                 <!-- FILE UPLOAD -->
                 <label class="fw-semibold mb-2">Upload XML File</label>
-                <label class="upload-zone w-100">
-                    <input type="file" name="xml_file" accept=".xml" hidden>
-                    <i class="bi bi-cloud-arrow-up-fill mb-2"></i>
-                    <p class="mb-1 fw-semibold">Drag & Drop XML File</p>
-                    <small class="text-muted">or click to browse</small>
+                <label class="upload-zone w-100" id="uploadZone">
+                    <input type="file" name="xml_file" accept=".xml" hidden id="fileInput">
+                    <i class="bi bi-cloud-arrow-up-fill mb-2" id="uploadIcon"></i>
+                    <p class="mb-1 fw-semibold" id="uploadText">Drag & Drop XML File</p>
+                    <small class="text-muted" id="uploadSubText">or click to browse</small>
+                    <div id="fileName" style="display:none; margin-top: 10px;">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <span id="fileNameText" class="text-success fw-semibold"></span>
+                    </div>
                 </label>
 
                 <!-- OR DIVIDER -->
@@ -52,6 +69,7 @@
                         name="xml_text" 
                         class="form-control"
                         rows="8"
+                        id="xmlTextArea"
                         placeholder="&lt;Project&gt;&#10;    &lt;TestSuite Name=&quot;...&quot;&gt;&#10;        ...&#10;&lt;/Project&gt;">
                     </textarea>
                 </div>
@@ -62,8 +80,8 @@
                         <i class="bi bi-arrow-left me-1"></i>Cancel
                     </a>
 
-                    <button type="submit" class="btn btn-primary px-4">
-                        <i class="bi bi-play-circle-fill me-1"></i>Load XML
+                    <button type="submit" class="btn btn-primary px-4" id="loadBtn">
+                        <i class="bi bi-play-circle-fill me-1"></i><span id="loadBtnText">Load XML</span>
                     </button>
                 </div>
             </form>
@@ -71,5 +89,96 @@
 
     </div>
 </div>
+
+<!-- JavaScript for file handling -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const fileNameText = document.getElementById('fileNameText');
+    const xmlForm = document.getElementById('xmlForm');
+    const xmlTextArea = document.getElementById('xmlTextArea');
+    const loadBtn = document.getElementById('loadBtn');
+    const loadBtnText = document.getElementById('loadBtnText');
+
+    // Click to upload
+    uploadZone.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type
+            if (!file.name.endsWith('.xml')) {
+                alert('Please select an XML file (.xml)');
+                fileInput.value = '';
+                fileName.style.display = 'none';
+                return;
+            }
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
+                fileInput.value = '';
+                fileName.style.display = 'none';
+                return;
+            }
+
+            // Show file name
+            fileNameText.textContent = file.name;
+            fileName.style.display = 'block';
+            xmlTextArea.value = ''; // Clear textarea if file is selected
+        }
+    });
+
+    // Drag & Drop
+    uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.style.borderColor = '#0d6efd';
+        uploadZone.style.background = '#eef5ff';
+    });
+
+    uploadZone.addEventListener('dragleave', () => {
+        uploadZone.style.borderColor = '#ced4da';
+        uploadZone.style.background = '#f8f9fa';
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.style.borderColor = '#ced4da';
+        uploadZone.style.background = '#f8f9fa';
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            // Trigger change event
+            fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+
+    // Form validation before submit
+    xmlForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const hasFile = fileInput.files.length > 0;
+        const hasText = xmlTextArea.value.trim().length > 0;
+
+        if (!hasFile && !hasText) {
+            alert('Please upload or paste XML content');
+            return;
+        }
+
+        // Show loading state
+        loadBtn.disabled = true;
+        loadBtnText.textContent = 'Loading...';
+
+        // Submit form
+        xmlForm.submit();
+    });
+});
+</script>
 
 {% endblock content %}

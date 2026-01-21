@@ -91,32 +91,159 @@
 </div>
 
 
+<!-- EDIT XML ELEMENT MODAL -->
+<div class="modal fade" id="editElementModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg rounded-4 border-0">
+            
+            <!-- Header -->
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Edit XML Element
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Element Name -->
+                <div class="mb-4">
+                    <label class="form-label">Element Name</label>
+                    <input type="text" id="elementNameInput" class="form-control" placeholder="e.g., TestCase">
+                </div>
+
+                <!-- Element Value/Text -->
+                <div class="mb-4">
+                    <label class="form-label">Element Text Content</label>
+                    <textarea id="elementValueInput" class="form-control" rows="3" placeholder="Optional text content"></textarea>
+                </div>
+
+                <!-- Attributes Section -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <label class="form-label mb-0">Attributes</label>
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="addAttrBtn">
+                            <i class="bi bi-plus-circle me-1"></i>Add Attribute
+                        </button>
+                    </div>
+                    <div id="attributesContainer">
+                        <!-- Attributes will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-danger" id="deleteElementBtn">
+                    <i class="bi bi-trash me-1"></i>Delete
+                </button>
+                <button type="button" class="btn btn-primary" id="saveElementBtn">
+                    <i class="bi bi-check-circle me-1"></i>Save Changes
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ADD NEW ELEMENT MODAL -->
+<div class="modal fade" id="addElementModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg rounded-4 border-0">
+            
+            <!-- Header -->
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Add New Element
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Parent Element Info -->
+                <div class="alert alert-info mb-4 d-flex align-items-center" style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0d6efd;">
+                    <i class="bi bi-info-circle me-2" style="font-size: 1.2rem;"></i>
+                    <div>
+                        <small class="d-block mb-1">Parent Element:</small>
+                        <strong id="parentElementName" style="font-family: monospace; font-size: 0.95rem;"></strong>
+                    </div>
+                </div>
+
+                <!-- Element Name -->
+                <div class="mb-4">
+                    <label class="form-label">Element Name <span class="text-danger">*</span></label>
+                    <input type="text" id="newElementNameInput" class="form-control" placeholder="e.g., TestCase">
+                </div>
+
+                <!-- Element Value/Text -->
+                <div class="mb-4">
+                    <label class="form-label">Element Text Content</label>
+                    <textarea id="newElementValueInput" class="form-control" rows="3" placeholder="Optional text content"></textarea>
+                </div>
+
+                <!-- Attributes Section -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <label class="form-label mb-0">Attributes</label>
+                        <button type="button" class="btn btn-sm btn-outline-success" id="addNewAttrBtn">
+                            <i class="bi bi-plus-circle me-1"></i>Add Attribute
+                        </button>
+                    </div>
+                    <div id="newAttributesContainer">
+                        <!-- Attributes will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-success" id="createElementBtn">
+                    <i class="bi bi-plus-circle me-1"></i>Create Element
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 
 <div class="container-fluid">
     <div class="row vh-100 mt-3">
 
         <!-- TOOL PANEL -->
-        <aside class="col-2 bg-white border-end tool-panel d-flex flex-column">
+        <aside class="col-1 bg-white border-end tool-panel d-flex flex-column">
             <!-- Header Section -->
             <div class="p-3 border-bottom">
                 <h5 class="fw-bold text-dark mb-0">
-                    <i class="bi bi-tools me-2"></i>Tools
+                    Tools
+                    <!-- <i class="bi bi-tools me-1 text-center">Tools</i> -->
                 </h5>
             </div>
 
-            <!-- Search Section -->
+            <!-- Search Section 
             <div class="p-3 border-bottom">
                 <input 
                     class="form-control form-control-sm" 
                     type="text"
                     placeholder="Search tools..." 
                     aria-label="Search tools">
-            </div>
+            </div> -->
 
             <!-- Tools List Section -->
             <div class="flex-grow-1 overflow-y-auto p-2">
                 <div class="list-group list-group-flush">
-                    <!-- Test Case Sections -->
+                    <!-- Test Case Sections
                     <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1"
                             title="Preconditions required before test execution">
                         <i class="bi bi-list-check me-2 text-warning"></i>
@@ -134,7 +261,8 @@
                         <i class="bi bi-check-circle me-2 text-success"></i>
                         <span class="small fw-500">PostCondition</span>
                     </button>
-                    <hr>
+                    <hr> -->
+
                     <!-- Action Tools -->
                     <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1" title="Read data from channel">
                         <i class="bi bi-arrow-down-circle me-2 text-primary"></i>
@@ -150,7 +278,7 @@
                     </button>
                     <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1" title="Perform calculation">
                         <i class="bi bi-calculator me-2 text-success"></i>
-                        <span class="small fw-500">Calculation</span>
+                        <span class="small fw-500">Calc</span>
                     </button>
                     <button class="list-group-item list-group-item-action border-0 py-2 px-2 rounded-2 mb-1" title="Conditional logic">
                         <i class="bi bi-diagram-3 me-2 text-danger"></i>
@@ -165,7 +293,7 @@
         </aside>
 
         <!-- GRAPHICAL EDIT WINDOW -->
-        <main class="col-6 bg-white position-relative d-flex flex-column editor-main">
+        <main class="col-4 bg-white position-relative d-flex flex-column editor-main">
             <!-- Toolbar -->
             <div class="editor-toolbar border-bottom px-3 py-2 d-flex align-items-center gap-2">
                 <button class="btn btn-sm btn-outline-secondary rounded-2" title="Go back">
@@ -301,7 +429,7 @@
         </main>
 
         <!-- RIGHT PANEL -->
-        <aside class="col-4 bg-white border-start d-flex flex-column right-panel">
+        <aside class="col-7 bg-white border-start d-flex flex-column right-panel">
 
             
             <!-- XML Tree Section -->
@@ -392,7 +520,7 @@
 
                 <div class="xml-editor-wrapper flex-grow-1">
                     <textarea class="xml-editor form-control" rows="20">
-                    {{ xml_content|default:"<Project>\n</Project>" }}
+                    {{ xml_content|default:"XML Code Editor" }}
                     </textarea>
                 </div>
             </div>
@@ -403,11 +531,12 @@
 </div>
 
 
+
 <script>
 /* ===============================
-   XML TREE DATA FROM DJANGO
+   GLOBAL TREE STATE
 ================================ */
-const treeData = {{ tree_data|safe }};
+let treeState = {{ tree_data|safe }};
 
 /* ===============================
    ICON MAPPING
@@ -427,20 +556,37 @@ function getIcon(tag) {
 /* ===============================
    BUILD TREE (ELEMENTS + ATTRS)
 ================================ */
-function buildTree(node) {
+function buildTree(node, path = []) {
 
     const hasAttributes = node.attributes && Object.keys(node.attributes).length > 0;
     const hasChildren = node.children && node.children.length > 0;
     const expandable = hasAttributes || hasChildren;
 
     let html = `
-        <li>
-            <div class="tree-node" ${expandable ? 'onclick="toggleNode(this)"' : ''}>
+        <li data-path="${path.join('.')}">
+            <div class="tree-node"
+                data-path="${path.join('.')}"
+                onclick="onTreeNodeClick(event, this)"
+                oncontextmenu="onTreeNodeContext(event, this)">
+                
                 ${expandable
                     ? '<i class="bi bi-chevron-down tree-toggle me-1"></i>'
                     : '<i class="bi bi-dash me-1"></i>'}
+
                 <i class="bi ${getIcon(node.tag)} me-1"></i>
                 <span class="tree-label">${node.tag}</span>
+                
+                <span class="tree-node-actions ms-2">
+                    <button class="btn btn-sm btn-outline-success tree-add-btn" onclick="addChildElement(event, this)" title="Add child element">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-info tree-edit-btn" onclick="editElement(event, this)" title="Edit element">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger tree-delete-btn" onclick="deleteElement(event, this)" title="Delete element">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </span>
             </div>
     `;
 
@@ -451,21 +597,29 @@ function buildTree(node) {
         if (hasAttributes) {
             Object.entries(node.attributes).forEach(([key, value]) => {
                 html += `
-                    <li>
-                        <div class="tree-node tree-attr">
-                            <i class="bi bi-at me-1 text-secondary"></i>
-                            <span class="tree-label">@${key}</span>
-                            <span class="text-muted ms-1">= "${value}"</span>
+                    <li data-path="${path.join('.')}" data-attr="${key}">
+                        <div class="tree-node tree-attr" onclick="onTreeNodeClick(event, this)">
+                            <i class="bi bi-at me-2 text-secondary"></i>
+                            <span class="tree-attr-key">@${key}</span>
+                            <span class="tree-attr-value">${value}</span>
+                            <span class="tree-node-actions ms-auto">
+                                <button class="btn btn-sm btn-outline-warning tree-edit-attr-btn" onclick="editAttribute(event, this, '${key}', '${value}', '${path.join('.')}');" title="Edit attribute">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger tree-delete-attr-btn" onclick="deleteAttribute(event, '${key}', '${path.join('.')}');" title="Delete attribute">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </span>
                         </div>
                     </li>
                 `;
             });
         }
 
-        /* 🔹 CHILD ELEMENTS */
+        /* 🔹 CHILD ELEMENTS (IMPORTANT FIX) */
         if (hasChildren) {
-            node.children.forEach(child => {
-                html += buildTree(child);
+            node.children.forEach((child, index) => {
+                html += buildTree(child, [...path, index]);
             });
         }
 
@@ -474,6 +628,37 @@ function buildTree(node) {
 
     html += `</li>`;
     return html;
+}
+
+/* ===============================
+   CLICK HANDLER (SELECT + TOGGLE)
+================================ */
+let selectedPath = null;
+
+function onTreeNodeClick(e, el) {
+    e.stopPropagation();
+
+    selectedPath = el.dataset.path;
+
+    // Highlight selected node
+    document.querySelectorAll(".tree-node").forEach(n => n.classList.remove("active"));
+    el.classList.add("active");
+
+    // Toggle expand/collapse
+    toggleNode(el);
+}
+
+/* ===============================
+   CONTEXT MENU HANDLER
+================================ */
+function onTreeNodeContext(e, el) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    selectedPath = el.dataset.path;
+
+    // 👉 later: show context menu here
+    console.log("Right click on path:", selectedPath);
 }
 
 /* ===============================
@@ -494,15 +679,327 @@ function toggleNode(el) {
 /* ===============================
    INITIAL RENDER
 ================================ */
-if (treeData) {
-    document.getElementById("xmlTreeRoot").innerHTML = buildTree(treeData);
+if (treeState) {
+    document.getElementById("xmlTreeRoot").innerHTML = buildTree(treeState);
 }
 </script>
 
 
 
+
 <script>
+// Edit/Delete functions - defined outside DOMContentLoaded
+let currentEditPath = null;
+let editModal = null;
+
+function getNodeByPath(path) {
+    if (!path) return treeState;
+    const indices = path.split('.').filter(p => p !== '' && !isNaN(p)).map(Number);
+    let node = treeState;
+    
+    for (let idx of indices) {
+        if (node.children && node.children[idx]) {
+            node = node.children[idx];
+        } else {
+            return null;
+        }
+    }
+    return node;
+}
+
+function editElement(e, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const treeNode = btn.closest('.tree-node');
+    currentEditPath = treeNode.dataset.path;
+    const node = getNodeByPath(currentEditPath);
+    
+    if (!node) return;
+    
+    document.getElementById('elementNameInput').value = node.tag;
+    document.getElementById('elementValueInput').value = node.text || '';
+    
+    const attrContainer = document.getElementById('attributesContainer');
+    attrContainer.innerHTML = '';
+    
+    if (node.attributes && Object.keys(node.attributes).length > 0) {
+        Object.entries(node.attributes).forEach(([key, value]) => {
+            const attrRow = document.createElement('div');
+            attrRow.className = 'row mb-2 align-items-center';
+            attrRow.innerHTML = `
+                <div class="col-5">
+                    <input type="text" class="form-control form-control-sm attr-key" value="${key}" placeholder="Key">
+                </div>
+                <div class="col-5">
+                    <input type="text" class="form-control form-control-sm attr-value" value="${value}" placeholder="Value">
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.parentElement.parentElement.remove();">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            attrContainer.appendChild(attrRow);
+        });
+    }
+    
+    if (editModal) editModal.show();
+}
+
+function editAttribute(e, btn, key, value, path) {
+    e.preventDefault();
+    e.stopPropagation();
+    const newValue = prompt(`Edit attribute "${key}":`, value);
+    if (newValue !== null) {
+        const node = getNodeByPath(path);
+        if (node && node.attributes) {
+            node.attributes[key] = newValue;
+            updateTreeAndXML();
+        }
+    }
+}
+
+function deleteAttribute(e, key, path) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (confirm(`Delete attribute "${key}"?`)) {
+        const node = getNodeByPath(path);
+        if (node && node.attributes) {
+            delete node.attributes[key];
+            updateTreeAndXML();
+        }
+    }
+}
+
+function deleteElement(e, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const treeNode = btn.closest('.tree-node');
+    const path = treeNode.dataset.path;
+    
+    if (!confirm('Delete this element and all its children?')) return;
+    
+    const pathIndices = path.split('.').filter(p => p !== '' && !isNaN(p)).map(Number);
+    if (pathIndices.length === 0) {
+        alert('Cannot delete root element');
+        return;
+    }
+    
+    const lastIdx = pathIndices.pop();
+    let parent = treeState;
+    
+    for (let idx of pathIndices) {
+        if (parent.children && parent.children[idx]) {
+            parent = parent.children[idx];
+        } else {
+            return;
+        }
+    }
+    
+    if (parent.children) {
+        parent.children.splice(lastIdx, 1);
+        updateTreeAndXML();
+    }
+}
+
+function addChildElement(e, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const treeNode = btn.closest('.tree-node');
+    const path = treeNode.dataset.path;
+    const node = getNodeByPath(path);
+    
+    if (!node) return;
+    
+    // Show add element modal
+    document.getElementById('parentElementName').textContent = node.tag;
+    document.getElementById('newElementNameInput').value = '';
+    document.getElementById('newElementValueInput').value = '';
+    document.getElementById('newAttributesContainer').innerHTML = '';
+    
+    // Store the parent path for later use
+    window.currentParentPath = path;
+    
+    if (addModal) addModal.show();
+}
+
+function updateTreeAndXML() {
+    document.getElementById("xmlTreeRoot").innerHTML = buildTree(treeState);
+    const xmlString = treeToXML(treeState);
+    const xmlEditor = document.querySelector('.xml-editor');
+    if (xmlEditor) xmlEditor.value = xmlString;
+}
+
+function treeToXML(node, indent = 0) {
+    const spaces = '  '.repeat(indent);
+    let xml = `${spaces}<${node.tag}`;
+    
+    if (node.attributes) {
+        Object.entries(node.attributes).forEach(([key, value]) => {
+            xml += ` ${key}="${value}"`;
+        });
+    }
+    
+    const hasChildren = node.children && node.children.length > 0;
+    const hasText = node.text && node.text.trim().length > 0;
+    
+    if (!hasChildren && !hasText) {
+        xml += ' />\n';
+    } else {
+        xml += '>';
+        if (hasText && !hasChildren) {
+            xml += node.text;
+        } else if (hasChildren) {
+            xml += '\n';
+            node.children.forEach(child => {
+                xml += treeToXML(child, indent + 1);
+            });
+            xml += spaces;
+        }
+        xml += `</${node.tag}>\n`;
+    }
+    return xml;
+}
+</script>
+
+<script>
+// Add modal variable
+let addModal = null;
+
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // Initialize modals
+    editModal = new bootstrap.Modal(document.getElementById('editElementModal'));
+    addModal = new bootstrap.Modal(document.getElementById('addElementModal'));
+    
+    // Handle create element button
+    document.getElementById('createElementBtn').addEventListener('click', function() {
+        const parentPath = window.currentParentPath;
+        if (!parentPath && parentPath !== '0') return;
+        
+        const parent = getNodeByPath(parentPath);
+        if (!parent) return;
+        
+        const elementName = document.getElementById('newElementNameInput').value.trim();
+        if (!elementName) {
+            alert('Element name is required');
+            return;
+        }
+        
+        // Create new element
+        const newElement = {
+            tag: elementName,
+            text: document.getElementById('newElementValueInput').value,
+            attributes: {},
+            children: []
+        };
+        
+        // Add attributes
+        document.querySelectorAll('#newAttributesContainer .row').forEach(row => {
+            const key = row.querySelector('.attr-key').value.trim();
+            const value = row.querySelector('.attr-value').value.trim();
+            if (key) newElement.attributes[key] = value;
+        });
+        
+        // Initialize children array if needed
+        if (!parent.children) parent.children = [];
+        parent.children.push(newElement);
+        
+        updateTreeAndXML();
+        addModal.hide();
+    });
+    
+    // Handle add attribute button in new element modal
+    document.getElementById('addNewAttrBtn').addEventListener('click', function() {
+        const attrContainer = document.getElementById('newAttributesContainer');
+        const attrRow = document.createElement('div');
+        attrRow.className = 'row mb-2 align-items-center';
+        attrRow.innerHTML = `
+            <div class="col-5">
+                <input type="text" class="form-control form-control-sm attr-key" placeholder="Key">
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control form-control-sm attr-value" placeholder="Value">
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.parentElement.parentElement.remove();">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+        attrContainer.appendChild(attrRow);
+    });
+    
+    // Handle save changes
+    document.getElementById('saveElementBtn').addEventListener('click', function() {
+        if (!currentEditPath) return;
+        const node = getNodeByPath(currentEditPath);
+        if (!node) return;
+        
+        const newName = document.getElementById('elementNameInput').value.trim();
+        if (newName && newName !== node.tag) node.tag = newName;
+        
+        node.text = document.getElementById('elementValueInput').value;
+        node.attributes = {};
+        document.querySelectorAll('#attributesContainer .row').forEach(row => {
+            const key = row.querySelector('.attr-key').value.trim();
+            const value = row.querySelector('.attr-value').value.trim();
+            if (key) node.attributes[key] = value;
+        });
+        
+        updateTreeAndXML();
+        editModal.hide();
+    });
+    
+    // Handle add attribute
+    document.getElementById('addAttrBtn').addEventListener('click', function() {
+        const attrContainer = document.getElementById('attributesContainer');
+        const attrRow = document.createElement('div');
+        attrRow.className = 'row mb-2 align-items-center';
+        attrRow.innerHTML = `
+            <div class="col-5">
+                <input type="text" class="form-control form-control-sm attr-key" placeholder="Key">
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control form-control-sm attr-value" placeholder="Value">
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.parentElement.parentElement.remove();">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+        attrContainer.appendChild(attrRow);
+    });
+    
+    // Handle delete element
+    document.getElementById('deleteElementBtn').addEventListener('click', function() {
+        if (!currentEditPath) return;
+        const pathIndices = currentEditPath.split('.').filter(p => p !== '' && !isNaN(p)).map(Number);
+        if (pathIndices.length === 0) {
+            alert('Cannot delete root element');
+            return;
+        }
+        if (!confirm('Delete this element and all its children?')) return;
+        
+        const lastIdx = pathIndices.pop();
+        let parent = treeState;
+        
+        for (let idx of pathIndices) {
+            if (parent.children && parent.children[idx]) {
+                parent = parent.children[idx];
+            } else {
+                return;
+            }
+        }
+        
+        if (parent.children) {
+            parent.children.splice(lastIdx, 1);
+            updateTreeAndXML();
+            editModal.hide();
+        }
+    });
     
     // ============ HIERARCHY TREE FUNCTIONS ============
     

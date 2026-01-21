@@ -73,27 +73,65 @@ def load_xml(request):
 
         # File upload
         if request.FILES.get("xml_file"):
-            xml_content = request.FILES["xml_file"].read().decode("utf-8")
+            try:
+                xml_file = request.FILES["xml_file"]
+                
+                # Validate file size (5MB max)
+                if xml_file.size > 5 * 1024 * 1024:
+                    messages.error(request, "File size must be less than 5MB")
+                    return render(request, "public/load_xml.html")
+                
+                # Validate file extension
+                if not xml_file.name.endswith('.xml'):
+                    messages.error(request, "Please upload an XML file (.xml)")
+                    return render(request, "public/load_xml.html")
+                
+                # Read file with error handling
+                try:
+                    xml_content = xml_file.read().decode("utf-8")
+                except UnicodeDecodeError:
+                    try:
+                        xml_content = xml_file.read().decode("latin-1")
+                    except Exception:
+                        messages.error(request, "Unable to read file. Please ensure it's a valid XML file with UTF-8 or Latin-1 encoding.")
+                        return render(request, "public/load_xml.html")
+                        
+            except Exception as e:
+                messages.error(request, f"Error reading file: {str(e)}")
+                return render(request, "public/load_xml.html")
 
         # Textarea input
         elif request.POST.get("xml_text"):
-            xml_content = request.POST.get("xml_text")
+            xml_content = request.POST.get("xml_text").strip()
 
         if not xml_content:
-            messages.error(request, "Please upload or paste XML.")
+            messages.error(request, "Please upload or paste XML content.")
             return render(request, "public/load_xml.html")
 
         try:
-            # Validate XML
-            ET.fromstring(xml_content)
+            # Validate XML structure
+            root = ET.fromstring(xml_content)
+            
+            # Check if root is valid
+            if not root.tag:
+                messages.error(request, "Invalid XML structure: root element not found.")
+                return render(request, "public/load_xml.html")
 
             # Store in session
             request.session["xml_content"] = xml_content
 
-            return redirect("editor")
+            messages.success(request, "XML loaded successfully!")
+            return redirect("editor_no_id")
 
         except ET.ParseError as e:
-            messages.error(request, f"Invalid XML: {e}")
+            # More helpful error message
+            error_msg = f"Invalid XML syntax at line {e.position[0]}: {str(e)}"
+            messages.error(request, error_msg)
+            # Keep the content in textarea for user to fix
+            return render(request, "public/load_xml.html", {"xml_text": xml_content if not request.FILES.get("xml_file") else ""})
+        except Exception as e:
+            messages.error(request, f"Error processing XML: {str(e)}")
+            return render(request, "public/load_xml.html")
 
     return render(request, "public/load_xml.html")
 

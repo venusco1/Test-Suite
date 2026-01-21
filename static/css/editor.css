@@ -1,3 +1,109 @@
+/* ===================================
+   GLOBAL STYLES & DESIGN TOKENS
+=================================== */
+:root {
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --light-bg: #f8f9fa;
+    --border-color: #dee2e6;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+* {
+    transition: all 0.2s ease;
+}
+
+/* ===================================
+   BUTTON STYLING
+=================================== */
+.btn {
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-sm {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0a58ca 0%, #0847a6 100%);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    border: none;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #146c43 0%, #0f5132 100%);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #bb2d3b 100%);
+    border: none;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #bb2d3b 0%, #842029 100%);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-primary:hover {
+    background-color: #f8f9fa;
+}
+
+/* ===================================
+   FORM CONTROLS
+=================================== */
+.form-control,
+.form-select,
+textarea {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+    outline: none;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
 /* Tool Panel Styling */
 .tool-panel {
     border-right: 1px solid #e5e7eb;
@@ -661,6 +767,56 @@
     color: #374151;
 }
 
+/* Tree node actions */
+.tree-node-actions {
+    display: none;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.tree-node:hover .tree-node-actions {
+    display: flex;
+}
+
+.tree-add-btn,
+.tree-edit-btn,
+.tree-delete-btn,
+.tree-edit-attr-btn,
+.tree-delete-attr-btn {
+    padding: 2px 6px !important;
+    font-size: 0.75rem !important;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.tree-node:hover .tree-add-btn,
+.tree-node:hover .tree-edit-btn,
+.tree-node:hover .tree-delete-btn,
+.tree-node:hover .tree-edit-attr-btn,
+.tree-node:hover .tree-delete-attr-btn {
+    opacity: 1;
+}
+
+.tree-add-btn:hover {
+    background-color: #d1ecf1 !important;
+    border-color: #0c5460 !important;
+    color: #0c5460 !important;
+}
+
+.tree-edit-btn:hover,
+.tree-edit-attr-btn:hover {
+    background-color: #fff3cd !important;
+    border-color: #ffc107 !important;
+    color: #ff8800 !important;
+}
+
+.tree-delete-btn:hover,
+.tree-delete-attr-btn:hover {
+    background-color: #f8d7da !important;
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+
 .tree-children {
     list-style: none;
     padding-left: 20px;
@@ -810,7 +966,7 @@
     left: 0;
     width: 100vw !important;
     height: 100vh !important;
-    z-index: 9999;
+    z-index: 9000;
     background: #ffffff;
     display: flex;
     flex-direction: column;
@@ -849,7 +1005,7 @@
     left: 0;
     width: 100vw !important;
     height: 100vh !important;
-    z-index: 9999;
+    z-index: 9000;
     background: #ffffff;
     display: flex !important;
     flex-direction: column;
@@ -911,13 +1067,19 @@ body.editor-fullscreen {
 
 .tree-attr {
     font-size: 0.8rem;
-    padding-left: 22px;
-    opacity: 0.85;
+    padding: 6px 10px;
+    opacity: 0.95;
     cursor: default;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    background-color: #f8f9fb;
+    border-left: 3px solid #e9ecef;
 }
 
 .tree-attr:hover {
-    background: transparent;
+    background-color: #f0f3f7;
+    border-left-color: #0d6efd;
 }
 
 .tree-attr i {
@@ -925,22 +1087,58 @@ body.editor-fullscreen {
     display: inline-flex;
     justify-content: center;
     font-size: 0.85em;
-    color: #9ca3af;
+    color: #6c757d;
+    flex-shrink: 0;
 }
 
-.tree-attr .attr-name {
-    color: #6b7280;
+.tree-attr-key {
+    color: #495057;
     font-weight: 600;
+    flex-shrink: 0;
+    min-width: max-content;
 }
 
-.tree-attr .attr-value {
+.tree-attr-value {
     color: #10b981;
     font-weight: 500;
-    margin-left: 4px;
+    flex: 1;
+    text-align: center;
+    padding: 0 8px;
+    word-break: break-word;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.tree-attr .attr-value.string {
-    color: #10b981;
+.tree-attr-value:hover {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+.tree-attr .tree-node-actions {
+    display: flex !important;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.tree-attr .tree-edit-attr-btn,
+.tree-attr .tree-delete-attr-btn {
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+.tree-attr .tree-edit-attr-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.tree-attr .tree-delete-attr-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
 }
 
 .tree-attr .attr-value.number {
@@ -955,3 +1153,412 @@ body.editor-fullscreen {
     color: #6b7280;
 }
 
+/* ===================================
+   MODAL STYLING
+=================================== */
+.modal {
+    z-index: 10000 !important;
+}
+
+.modal-backdrop {
+    z-index: 9998 !important;
+}
+
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+    border: none;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header.bg-success {
+    background: linear-gradient(135deg, #198754 0%, #146c43 100%) !important;
+}
+
+.modal-header.bg-info {
+    background: linear-gradient(135deg, #0dcaf0 0%, #0aa8cc 100%) !important;
+}
+
+.modal-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    background: #ffffff;
+}
+
+.modal-footer {
+    border: none;
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    border-radius: 0 0 12px 12px;
+}
+
+.modal-footer .btn {
+    min-width: 100px;
+}
+
+/* ===================================
+   TREE NODE STYLING ENHANCEMENTS
+=================================== */
+.tree-node {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+    position: relative;
+}
+
+.tree-node:hover {
+    background: rgba(13, 110, 253, 0.08);
+    border-left: 3px solid #0d6efd;
+    padding-left: 9px;
+}
+
+.tree-node.active {
+    background: rgba(13, 110, 253, 0.15);
+    border-left: 3px solid #0d6efd;
+    padding-left: 9px;
+}
+
+.tree-toggle {
+    margin-right: 6px;
+    transition: transform 0.3s ease;
+    color: #6b7280;
+    font-size: 0.85rem;
+}
+
+.tree-toggle.collapsed {
+    transform: rotate(-90deg);
+}
+
+.tree-label {
+    font-weight: 600;
+    color: #1f2937;
+    flex: 1;
+}
+
+/* Tree node actions */
+.tree-node-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    align-items: center;
+}
+
+.tree-add-btn,
+.tree-edit-btn,
+.tree-delete-btn,
+.tree-edit-attr-btn,
+.tree-delete-attr-btn {
+    padding: 4px 8px !important;
+    font-size: 0.75rem !important;
+    opacity: 0;
+    transition: all 0.2s ease;
+    border-radius: 4px !important;
+    border: 1px solid #dee2e6 !important;
+    background: #ffffff !important;
+}
+
+.tree-node:hover .tree-add-btn,
+.tree-node:hover .tree-edit-btn,
+.tree-node:hover .tree-delete-btn,
+.tree-node:hover .tree-edit-attr-btn,
+.tree-node:hover .tree-delete-attr-btn {
+    opacity: 1;
+}
+
+.tree-add-btn:hover {
+    background-color: #d1ecf1 !important;
+    border-color: #0c5460 !important;
+    color: #0c5460 !important;
+    transform: scale(1.05);
+}
+
+.tree-edit-btn:hover,
+.tree-edit-attr-btn:hover {
+    background-color: #fff3cd !important;
+    border-color: #ffc107 !important;
+    color: #ff8800 !important;
+    transform: scale(1.05);
+}
+
+.tree-delete-btn:hover,
+.tree-delete-attr-btn:hover {
+    background-color: #f8d7da !important;
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+    transform: scale(1.05);
+}
+
+/* ===================================
+   XML TREE CONTAINER
+=================================== */
+.xml-tree-container {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 12px;
+    max-height: 350px;
+    overflow-y: auto;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.xml-tree {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.xml-tree li {
+    margin: 4px 0;
+}
+
+.tree-children {
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border-left: 2px solid #e9ecef;
+    margin-left: 8px;
+    padding-left: 12px;
+    max-height: 999px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.tree-children.collapsed {
+    max-height: 0;
+    overflow: hidden;
+}
+
+.tree-children:hover {
+    border-left-color: #0d6efd;
+}
+
+.tree-attr {
+    font-size: 0.85rem;
+    padding-left: 22px;
+    opacity: 0.9;
+    cursor: default;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin: 2px 0;
+}
+
+.tree-attr:hover {
+    background: #e9ecef;
+}
+
+/* ===================================
+   XML CODE EDITOR
+=================================== */
+.xml-editor-wrapper {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    background: #ffffff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.xml-editor {
+    font-family: "Fira Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    background: #ffffff;
+    color: #1f2937;
+    border: none;
+    padding: 12px;
+    resize: none;
+    flex: 1;
+    overflow: auto;
+    font-weight: 500;
+}
+
+.xml-editor:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: #0d6efd;
+}
+
+/* ===================================
+   RIGHT PANEL HEADER
+=================================== */
+.right-panel {
+    background: #ffffff;
+    border-left: 2px solid #e9ecef;
+}
+
+.right-panel h6 {
+    color: #1f2937;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+}
+
+.right-panel .badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+/* ===================================
+   SECTION CARDS
+=================================== */
+.section-card {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    background: #ffffff;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.section-card:hover {
+    border-color: #0d6efd;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.section-card.selected {
+    border-color: #0d6efd;
+    background: #f0f6ff;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+}
+
+.section-card-header {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 8px 8px 0 0;
+}
+
+.section-icon-wrapper {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.section-title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.section-card-body {
+    padding: 1rem;
+}
+
+.tools-container {
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.empty-placeholder {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #9ca3af;
+    border: 2px dashed #e9ecef;
+    border-radius: 8px;
+}
+
+.empty-placeholder i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* ===================================
+   ATTRIBUTE MANAGEMENT
+=================================== */
+#attributesContainer,
+#newAttributesContainer {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    background: #f8f9fa;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+#attributesContainer .row,
+#newAttributesContainer .row {
+    margin-bottom: 12px;
+}
+
+#attributesContainer .row:last-child,
+#newAttributesContainer .row:last-child {
+    margin-bottom: 0;
+}
+
+.attr-key,
+.attr-value {
+    font-size: 0.85rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+}
+
+.attr-key::placeholder,
+.attr-value::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+}
+
+/* ===================================
+   PARENT ELEMENT INFO
+=================================== */
+#parentElementName {
+    padding: 8px 12px;
+    background: #e7f3ff;
+    border-left: 3px solid #0d6efd;
+    border-radius: 4px;
+    color: #0d6efd;
+    font-family: monospace;
+}
+
+/* ===================================
+   SCROLLBAR STYLING
+=================================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

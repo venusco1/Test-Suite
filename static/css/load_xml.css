@@ -10,7 +10,7 @@
         border-radius: 12px;
         padding: 35px;
         text-align: center;
-        transition: 0.3s ease;
+        transition: all 0.3s ease;
         background: #f8f9fa;
         cursor: pointer;
     }
@@ -23,6 +23,27 @@
     .upload-zone i {
         font-size: 2.5rem;
         color: #0d6efd;
+        transition: all 0.3s ease;
+    }
+
+    .upload-zone:hover i {
+        transform: scale(1.1);
+    }
+
+    #fileName {
+        margin-top: 10px;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .divider {
@@ -51,47 +72,54 @@
     textarea {
         font-family: 'Courier New', monospace;
         font-size: 0.9rem;
-    }
-
-    .btn-upload {
-        background-color: #0d6efd;
-        color: #fff;
+        border: 2px solid #dee2e6;
         border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
     }
 
-    .btn-upload:hover {
-        background-color: #0b5ed7;
-        color: #fff;
+    textarea:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        outline: none;
     }
 
-    .error-message {
-        color: #dc3545;
-        font-weight: 500;
-        margin-top: 15px;
-    }
-
-    .success-message {
-        color: #28a745;
-        font-weight: 500;
-        margin-top: 15px;
-    }
-
-    .btn-upload {
-        background-color: #0d6efd;
-        color: #fff;
+    .alert {
         border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
+        border: none;
+        display: flex;
+        align-items: center;
     }
 
-    .btn-upload:hover {
-        background-color: #0b5ed7;
-        color: #fff;
+    .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
     }
 
-    
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
 
+    .btn-outline-secondary {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+    }
+
+    .btn-primary {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+    }
