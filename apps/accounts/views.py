@@ -104,8 +104,10 @@ import xml.etree.ElementTree as ET
 def xml_to_tree(element):
     return {
         "tag": element.tag,
+        "attributes": element.attrib,  
         "children": [xml_to_tree(child) for child in element]
     }
+
 
 def editor(request):
     xml_content = request.session.get("xml_content", "")
@@ -115,7 +117,7 @@ def editor(request):
         root = ET.fromstring(xml_content)
         tree_data = xml_to_tree(root)
 
-    return render(request, "public/editor1.html", {
+    return render(request, "public/editor.html", {
         "xml_content": xml_content,
         "tree_data": tree_data
     })

@@ -842,6 +842,38 @@
     border-radius: 0;
 }
 
+/* Fullscreen mode for XML tree */
+.xml-tree-section.fullscreen {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999;
+    background: #ffffff;
+    display: flex !important;
+    flex-direction: column;
+    border-radius: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.xml-tree-section.fullscreen h6 {
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    background: #f8f9fa;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.xml-tree-section.fullscreen .xml-tree-container {
+    flex: 1;
+    max-height: none;
+    height: 100%;
+    border-radius: 0;
+}
+
 /* Prevent background scroll */
 body.editor-fullscreen {
     overflow: hidden;
@@ -854,6 +886,72 @@ body.editor-fullscreen {
     border-color: #0d6efd !important;
 }
 
-#xmlFullscreenBtn {
+#xmlFullscreenBtn,
+#xmlTreeFullscreenBtn {
     transition: all 0.2s ease;
 }
+
+#xmlTreeFullscreenBtn.btn-active {
+    background-color: #0d6efd !important;
+    color: #ffffff !important;
+    border-color: #0d6efd !important;
+}
+
+
+.attribute-node {
+    padding-left: 22px;
+    font-size: 0.82rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.attribute-node:hover {
+    background-color: #e9ecef;
+}
+
+.tree-attr {
+    font-size: 0.8rem;
+    padding-left: 22px;
+    opacity: 0.85;
+    cursor: default;
+}
+
+.tree-attr:hover {
+    background: transparent;
+}
+
+.tree-attr i {
+    min-width: 18px;
+    display: inline-flex;
+    justify-content: center;
+    font-size: 0.85em;
+    color: #9ca3af;
+}
+
+.tree-attr .attr-name {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.tree-attr .attr-value {
+    color: #10b981;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+.tree-attr .attr-value.string {
+    color: #10b981;
+}
+
+.tree-attr .attr-value.number {
+    color: #3b82f6;
+}
+
+.tree-attr .attr-value.boolean {
+    color: #f59e0b;
+}
+
+.tree-attr .attr-value.null {
+    color: #6b7280;
+}
+
