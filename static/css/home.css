@@ -1,0 +1,212 @@
+/* ---------- Navbar Base ---------- */
+.app-navbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 100;
+}
+
+.nav-container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ---------- Brand ---------- */
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #111827;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.app-brand i {
+    font-size: 1.2rem;
+    color: #4f46e5;
+}
+
+/* ---------- Nav Links ---------- */
+.nav-links {
+    display: flex;
+    gap: 6px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: #374151;
+    transition: all 0.2s ease;
+}
+
+.nav-item i {
+    font-size: 0.95rem;
+}
+
+/* Hover */
+.nav-item:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+/* Active */
+.nav-item.active {
+    background: #eef2ff;
+    color: #4338ca;
+    font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .nav-links {
+        gap: 2px;
+    }
+
+    .nav-item span {
+        display: none;
+    }
+
+    .nav-item {
+        padding: 8px 10px;
+    }
+}
+
+
+<style>
+/* ---------- Base ---------- */
+body {
+    background: #f3f4f6;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.app-home {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+/* ---------- Main Card ---------- */
+.home-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 780px;
+    border-radius: 14px;
+    padding: 48px 42px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+}
+
+/* ---------- Header ---------- */
+.home-header {
+    text-align: center;
+    margin-bottom: 42px;
+}
+
+.app-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.9rem;
+}
+
+.home-header h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.home-header p {
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+/* ---------- Actions ---------- */
+.home-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.action-card {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 22px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    border: 1px solid #e5e7eb;
+    transition: all 0.25s ease;
+}
+
+.action-card i {
+    font-size: 1.6rem;
+}
+
+/* Primary */
+.action-card.primary {
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.action-card.primary:hover {
+    background: #e0e7ff;
+    transform: translateY(-3px);
+}
+
+/* Secondary */
+.action-card.secondary {
+    background: #f9fafb;
+    color: #374151;
+}
+
+.action-card.secondary:hover {
+    background: #f3f4f6;
+    transform: translateY(-3px);
+}
+
+.action-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.action-card span {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+    .home-card {
+        padding: 36px 26px;
+    }
+
+    .home-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .home-header h1 {
+        font-size: 1.6rem;
+    }
+}

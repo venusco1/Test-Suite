@@ -1,0 +1,1085 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+{% block title %}Test Suite Manager - XML Viewer{% endblock title %}
+
+{% block style %} 
+<style>
+/* Hide the entire base navbar */
+nav.navbar {
+    display: none !important;
+}
+
+/* Ensure our enhanced navbar is visible */
+.enhanced-navbar {
+    display: flex !important;
+}
+
+/* Adjust body padding since navbar is hidden */
+body {
+    padding-top: 0 !important;
+}
+</style>
+
+<link rel="stylesheet" href="{% static 'css/xml_view.css' %}">
+
+{% endblock style %}
+
+{% block nav_links %}
+<!-- This block is in base navbar, so we leave it empty -->
+{% endblock nav_links %}
+
+{% block content %}
+<!-- Enhanced Navigation Bar -->
+<div class="enhanced-navbar">
+    <div class="navbar-section">
+        <div class="app-brand">
+            <i class="bi bi-diagram-3-fill brand-icon"></i>
+            <span class="brand-text">XML Suite Manager</span>
+            <span class="brand-badge">View Mode</span>
+        </div>
+    </div>
+    
+    <div class="navbar-section">
+        <div class="nav-group">
+            <span class="nav-label">
+                <i class="bi bi-compass"></i>
+                Navigation
+            </span>
+            <a href="{% url 'load_xml' %}" class="nav-btn" title="Load XML File">
+                <i class="bi bi-file-earmark-arrow-up"></i>
+                <span>Load XML</span>
+            </a>
+            <a href="{% url 'edit_xml_view' %}" class="nav-btn" title="Edit XML">
+                <i class="bi bi-pencil-square"></i>
+                <span>Edit Mode</span>
+            </a>
+            <a href="{% url 'home' %}" class="nav-btn" title="Go to Home">
+                <i class="bi bi-house-door"></i>
+                <span>Home</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="navbar-section">
+        <div class="nav-group">
+            <span class="nav-label">
+                <i class="bi bi-tree"></i>
+                Tree Controls
+            </span>
+            <button class="nav-btn" onclick="expandAll()" title="Expand All Nodes">
+                <i class="bi bi-arrows-angle-expand"></i>
+                <span>Expand All</span>
+            </button>
+            <button class="nav-btn" onclick="collapseAll()" title="Collapse All Nodes">
+                <i class="bi bi-arrows-angle-contract"></i>
+                <span>Collapse All</span>
+            </button>
+            <button class="nav-btn" onclick="toggleFilterPopup()" title="Filter Elements">
+                <i class="bi bi-funnel-fill"></i>
+                <span>Filter</span>
+            </button>
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out">
+                    <i class="bi bi-zoom-out"></i>
+                </button>
+                <span class="zoom-level" id="zoomLevel">100%</span>
+                <button class="zoom-btn" onclick="zoomIn()" title="Zoom In">
+                    <i class="bi bi-zoom-in"></i>
+                </button>
+                <button class="zoom-btn" onclick="resetZoom()" title="Reset Zoom">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </button>
+                <button class="nav-btn" onclick="toggleTreeFullscreen()" title="Tree Fullscreen">
+                    <i class="bi bi-fullscreen"></i>
+                    <span>Fullscreen</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="navbar-section">
+        <div class="nav-group">
+            <span class="nav-label">
+                <i class="bi bi-code-slash"></i>
+                Editor Tools
+            </span>
+            <button class="nav-btn" onclick="copyToClipboard()" title="Copy XML Content">
+                <i class="bi bi-clipboard-data"></i>
+                <span>Copy</span>
+            </button>
+            <button class="nav-btn" onclick="downloadXML()" title="Download XML File">
+                <i class="bi bi-download"></i>
+                <span>Download</span>
+            </button>
+            <button class="nav-btn" onclick="toggleFullscreen()" title="Editor Fullscreen">
+                <i class="bi bi-aspect-ratio"></i>
+                <span>Fullscreen</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Layout Container -->
+<div class="main-layout">
+    
+    <!-- Left Panel - XML Tree (No Header) -->
+    <div class="main-panel left-main-panel">
+        <div class="tree-section">
+            <div class="tree-controls">
+                <div class="tree-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search elements..." id="treeSearch">
+                </div>
+            </div>
+            
+            <!-- Filter Popup -->
+            <div class="filter-popup" id="filterPopup" style="display: none;">
+                <div class="filter-content">
+                    <div class="filter-group">
+                        <h6><i class="bi bi-funnel-fill me-1"></i>Filter Elements</h6>
+                        
+                        <!-- Element Checkboxes -->
+                        <div class="element-filters">
+                            <label class="element-filter-item">
+                                <input type="checkbox" name="filterElement" value="TestCase">
+                                <span>TestCase</span>
+                            </label>
+                            <label class="element-filter-item">
+                                <input type="checkbox" name="filterElement" value="Action">
+                                <span>Action</span>
+                            </label>
+                            <label class="element-filter-item">
+                                <input type="checkbox" name="filterElement" value="PreCondition">
+                                <span>PreCondition</span>
+                            </label>
+                            <label class="element-filter-item">
+                                <input type="checkbox" name="filterElement" value="PostCondition">
+                                <span>PostCondition</span>
+                            </label>
+                            <label class="element-filter-item">
+                                <input type="checkbox" name="filterElement" value="Variable">
+                                <span>Variable</span>
+                            </label>
+                            <label class="element-filter-item">
+                                <input type="checkbox" name="filterElement" value="Data">
+                                <span>Data</span>
+                            </label>
+                        </div>
+                        
+                        <!-- Custom Filter Input -->
+                        <div class="custom-filter-input">
+                            <input type="text" id="customElementInput" placeholder="Enter custom element name...">
+                            <button onclick="addCustomElement()">Add</button>
+                        </div>
+                        
+                        <!-- Active Filters -->
+                        <div class="active-filters">
+                            <div class="active-filters-header">
+                                <span>Hidden Elements:</span>
+                                <button onclick="clearAllFilters()">Clear All</button>
+                            </div>
+                            <div id="activeFiltersList"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Actions -->
+                    <div class="filter-actions">
+                        <button onclick="applyFilter()">Apply Filter</button>
+                        <button onclick="resetFilter()">Reset</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tree-container">
+                {% if tree_data %}
+                    <ul class="xml-tree" id="xmlTreeRoot">
+                        <!-- Tree will be populated by JavaScript -->
+                    </ul>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-file-earmark-x"></i>
+                        <h5>No XML Loaded</h5>
+                        <p>Please load an XML file to see the tree structure</p>
+                        <a href="{% url 'load_xml' %}" class="btn">
+                            <i class="bi bi-upload"></i> Load XML File
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel - XML Code Viewer (No Header) -->
+    <div class="main-panel right-main-panel">
+        <div class="editor-section">
+            <div class="editor-wrapper">
+                <textarea class="xml-editor" readonly placeholder="XML code will appear here...">{{ xml_content|default:"" }}</textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+// Global tree state
+let treeState = {{ tree_data|safe }} || null;
+let originalTreeState = {{ tree_data|safe }} || null;
+let selectedPath = null;
+let customFilters = [];
+
+// Global variables
+let hiddenElements = [];
+let originalTreeHTML = '';
+
+// Toggle filter popup
+function toggleFilterPopup() {
+    const popup = document.getElementById('filterPopup');
+    if (popup.style.display === 'none' || !popup.style.display) {
+        popup.style.display = 'block';
+    } else {
+        popup.style.display = 'none';
+    }
+}
+
+// Add custom element
+function addCustomElement() {
+    const input = document.getElementById('customElementInput');
+    const elementName = input.value.trim();
+    
+    if (elementName === '') {
+        alert('Please enter an element name');
+        return;
+    }
+    
+    if (hiddenElements.includes(elementName)) {
+        alert('Element already added');
+        return;
+    }
+    
+    hiddenElements.push(elementName);
+    input.value = '';
+    updateActiveFiltersList();
+}
+
+// Update active filters list
+function updateActiveFiltersList() {
+    const list = document.getElementById('activeFiltersList');
+    list.innerHTML = '';
+    
+    // Get checked elements
+    const checkedElements = [];
+    document.querySelectorAll('input[name="filterElement"]:checked').forEach(checkbox => {
+        checkedElements.push(checkbox.value);
+    });
+    
+    // Combine with custom elements
+    const allHidden = [...checkedElements, ...hiddenElements];
+    
+    if (allHidden.length === 0) {
+        list.innerHTML = '<div class="no-filters">No elements hidden</div>';
+    } else {
+        allHidden.forEach(element => {
+            const item = document.createElement('div');
+            item.className = 'filter-item';
+            item.innerHTML = `
+                <span>${element}</span>
+                <button onclick="removeElement('${element}')">×</button>
+            `;
+            list.appendChild(item);
+        });
+    }
+}
+
+// Remove element from hidden list
+function removeElement(elementName) {
+    // Remove from custom elements
+    hiddenElements = hiddenElements.filter(el => el !== elementName);
+    
+    // Uncheck checkbox if it's a predefined element
+    const checkbox = document.querySelector(`input[name="filterElement"][value="${elementName}"]`);
+    if (checkbox) {
+        checkbox.checked = false;
+    }
+    
+    updateActiveFiltersList();
+    applyFilter(); // Auto-apply when removing
+}
+
+// Clear all filters
+function clearAllFilters() {
+    hiddenElements = [];
+    
+    // Uncheck all checkboxes
+    document.querySelectorAll('input[name="filterElement"]:checked').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    updateActiveFiltersList();
+    applyFilter(); // Auto-apply when clearing
+}
+
+// Apply filter - HIDE selected elements
+function applyFilter() {
+    console.log('Applying filter...');
+    
+    // Get all elements to hide
+    const checkedElements = [];
+    document.querySelectorAll('input[name="filterElement"]:checked').forEach(checkbox => {
+        checkedElements.push(checkbox.value);
+    });
+    
+    const allElementsToHide = [...checkedElements, ...hiddenElements];
+    console.log('Elements to hide:', allElementsToHide);
+    
+    // Get tree root
+    const treeRoot = document.getElementById('xmlTreeRoot');
+    if (!treeRoot) {
+        console.error('Tree root not found');
+        return;
+    }
+    
+    // Store original tree HTML if not already stored
+    if (!originalTreeHTML) {
+        originalTreeHTML = treeRoot.innerHTML;
+    }
+    
+    // If no elements to hide, restore original tree
+    if (allElementsToHide.length === 0) {
+        treeRoot.innerHTML = originalTreeHTML;
+        console.log('No filters applied - showing original tree');
+        return;
+    }
+    
+    // Clone the original tree to work with
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = originalTreeHTML;
+    
+    // Hide matching elements
+    allElementsToHide.forEach(elementName => {
+        const elements = tempDiv.querySelectorAll(`.tree-node[data-element="${elementName}"]`);
+        elements.forEach(el => {
+            const li = el.closest('li');
+            if (li) {
+                li.style.display = 'none';
+            }
+        });
+        
+        // Also try by tag name if data-element not found
+        const tagElements = tempDiv.querySelectorAll(`.tree-label`);
+        tagElements.forEach(el => {
+            if (el.textContent === elementName) {
+                const li = el.closest('li');
+                if (li) {
+                    li.style.display = 'none';
+                }
+            }
+        });
+    });
+    
+    // Update the tree
+    treeRoot.innerHTML = tempDiv.innerHTML;
+    console.log('Filter applied successfully');
+}
+
+// Reset filter - Show all elements
+function resetFilter() {
+    console.log('Resetting filter...');
+    
+    const treeRoot = document.getElementById('xmlTreeRoot');
+    if (!treeRoot) {
+        console.error('Tree root not found');
+        return;
+    }
+    
+    // Restore original tree
+    if (originalTreeHTML) {
+        treeRoot.innerHTML = originalTreeHTML;
+    }
+    
+    // Clear all selections
+    clearAllFilters();
+    
+    console.log('Filter reset successfully');
+}
+
+// Initialize filter system
+function initializeFilters() {
+    // Add event listeners to checkboxes
+    document.querySelectorAll('input[name="filterElement"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateActiveFiltersList);
+    });
+    
+    // Initialize active filters list
+    updateActiveFiltersList();
+    
+    console.log('Filter system initialized');
+}
+
+// Enhanced search functionality
+function setupSearch() {
+    const searchInput = document.getElementById('treeSearch');
+    if (searchInput) {
+        console.log('Search input found:', searchInput);
+        
+        // Add search on input
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            console.log('Search term:', searchTerm);
+            performSearch(searchTerm);
+        });
+        
+        // Add search on Enter key
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const searchTerm = this.value.toLowerCase();
+                performSearch(searchTerm);
+            }
+        });
+        
+        // Clear search on Escape key
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                this.value = '';
+                performSearch('');
+                this.blur();
+            }
+        });
+        
+        // Focus search on Ctrl+F
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+        });
+    } else {
+        console.error('Search input not found!');
+    }
+}
+
+function performSearch(searchTerm) {
+    console.log('Performing search for:', searchTerm);
+    const allNodes = document.querySelectorAll('.tree-node');
+    console.log('Found nodes:', allNodes.length);
+    
+    // Clear previous highlights
+    clearSearchHighlights();
+    
+    // Clear previous search results
+    let resultsDiv = document.getElementById('searchResults');
+    if (resultsDiv) {
+        resultsDiv.remove();
+    }
+    
+    if (searchTerm === '') {
+        // Show all nodes when search is empty
+        allNodes.forEach(node => {
+            const parentLi = node.closest('li');
+            parentLi.style.display = '';
+        });
+        return;
+    }
+    
+    let matchCount = 0;
+    const matches = [];
+    
+    allNodes.forEach(node => {
+        const label = node.querySelector('.tree-label');
+        const text = node.querySelector('.tree-text');
+        const attrKey = node.querySelector('.tree-attr-key');
+        const attrValue = node.querySelector('.tree-attr-value');
+        
+        let nodeText = '';
+        if (label) nodeText += label.textContent.toLowerCase();
+        if (text) nodeText += ' ' + text.textContent.toLowerCase();
+        if (attrKey) nodeText += ' ' + attrKey.textContent.toLowerCase();
+        if (attrValue) nodeText += ' ' + attrValue.textContent.toLowerCase();
+        
+        const parentLi = node.closest('li');
+        const nodePath = parentLi.dataset.path || '';
+        
+        if (nodeText.includes(searchTerm)) {
+            matchCount++;
+            matches.push({
+                element: node,
+                path: nodePath,
+                text: nodeText,
+                label: label ? label.textContent : '',
+                type: getNodeTypeInfo(node)
+            });
+            
+            parentLi.style.display = '';
+            // Highlight matching text
+            highlightSearchTerm(node, searchTerm);
+            
+            // Show all parents to make the match visible
+            let parent = parentLi.parentElement;
+            while (parent && parent.classList.contains('tree-children')) {
+                parent.style.display = '';
+                const parentLi = parent.closest('li');
+                if (parentLi) {
+                    parentLi.style.display = '';
+                    // Expand parent nodes
+                    const toggleIcon = parentLi.querySelector('.tree-toggle');
+                    if (toggleIcon && toggleIcon.classList.contains('bi-chevron-right')) {
+                        toggleIcon.classList.remove('bi-chevron-right');
+                        toggleIcon.classList.add('bi-chevron-down');
+                    }
+                }
+                parent = parent.parentElement?.parentElement;
+            }
+        } else {
+            parentLi.style.display = 'none';
+        }
+    });
+    
+    // Create search results panel
+    createSearchResults(matchCount, searchTerm, matches);
+    
+    // Auto-scroll to first match if found
+    if (matches.length > 0) {
+        setTimeout(() => {
+            scrollToMatch(matches[0].path);
+        }, 100);
+    }
+}
+
+function createSearchResults(count, searchTerm, matches = []) {
+    // Remove existing results
+    let resultsDiv = document.getElementById('searchResults');
+    if (resultsDiv) {
+        resultsDiv.remove();
+    }
+    
+    if (searchTerm === '') return;
+    
+    // Create new results panel
+    resultsDiv = document.createElement('div');
+    resultsDiv.id = 'searchResults';
+    resultsDiv.className = 'search-results-panel';
+    
+    if (count === 0) {
+        resultsDiv.innerHTML = `
+            <div class="search-header">
+                <i class="bi bi-search"></i>
+                <span>No results for "${searchTerm}"</span>
+                <button class="search-close" onclick="clearSearch()">×</button>
+            </div>
+        `;
+    } else {
+        let resultsHtml = `
+            <div class="search-header">
+                <i class="bi bi-search"></i>
+                <span>${count} result${count !== 1 ? 's' : ''} for "${searchTerm}"</span>
+                <button class="search-close" onclick="clearSearch()">×</button>
+            </div>
+            <div class="search-matches">
+        `;
+        
+        matches.slice(0, 10).forEach((match, index) => {
+            resultsHtml += `
+                <div class="search-match-item" onclick="scrollToMatch('${match.path}')" title="Click to navigate">
+                    <div class="match-info">
+                        <span class="match-type">${match.type}</span>
+                        <span class="match-text">${match.label}</span>
+                    </div>
+                    <div class="match-path">${match.path}</div>
+                </div>
+            `;
+        });
+        
+        if (matches.length > 10) {
+            resultsHtml += `<div class="search-more">... and ${matches.length - 10} more results</div>`;
+        }
+        
+        resultsHtml += '</div>';
+        resultsDiv.innerHTML = resultsHtml;
+    }
+    
+    // Add to search container
+    const searchContainer = document.querySelector('.tree-search');
+    if (searchContainer) {
+        searchContainer.appendChild(resultsDiv);
+    }
+}
+
+function clearSearch() {
+    const searchInput = document.getElementById('treeSearch');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    performSearch('');
+    
+    // Remove results panel
+    const resultsDiv = document.getElementById('searchResults');
+    if (resultsDiv) {
+        resultsDiv.remove();
+    }
+}
+
+function clearSearchHighlights() {
+    document.querySelectorAll('.search-highlight').forEach(el => {
+        el.classList.remove('search-highlight');
+        const parent = el.parentNode;
+        parent.replaceChild(document.createTextNode(el.textContent), el);
+        parent.normalize();
+    });
+}
+
+function highlightSearchTerm(node, searchTerm) {
+    const label = node.querySelector('.tree-label');
+    const text = node.querySelector('.tree-text');
+    const attrKey = node.querySelector('.tree-attr-key');
+    const attrValue = node.querySelector('.tree-attr-value');
+    
+    [label, text, attrKey, attrValue].forEach(element => {
+        if (element && element.textContent.toLowerCase().includes(searchTerm)) {
+            const text = element.textContent;
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            const highlightedText = text.replace(regex, '<span class="search-highlight">$1</span>');
+            element.innerHTML = highlightedText;
+        }
+    });
+}
+
+function getNodeTypeInfo(node) {
+    if (node.classList.contains('tree-attr')) return 'Attribute';
+    if (node.classList.contains('tree-text')) return 'Text Content';
+    const label = node.querySelector('.tree-label');
+    return label ? label.textContent : 'Unknown';
+}
+
+function scrollToMatch(path) {
+    const node = document.querySelector(`[data-path="${path}"] .tree-node`);
+    if (node) {
+        // Remove previous highlights
+        document.querySelectorAll('.search-match-highlight').forEach(el => {
+            el.classList.remove('search-match-highlight');
+        });
+        
+        // Add highlight to current match
+        node.classList.add('search-match-highlight');
+        
+        // Calculate scroll position with navbar offset
+        const navbarHeight = document.querySelector('.enhanced-navbar')?.offsetHeight || 0;
+        const nodeRect = node.getBoundingClientRect();
+        const scrollTop = window.pageYOffset + nodeRect.top - navbarHeight - 20;
+        
+        // Smooth scroll to position
+        window.scrollTo({
+            top: Math.max(0, scrollTop),
+            behavior: 'smooth'
+        });
+        
+        // Remove highlight after 2 seconds
+        setTimeout(() => {
+            node.classList.remove('search-match-highlight');
+        }, 2000);
+    }
+}
+function copyToClipboard() {
+    const xmlContent = document.querySelector('.xml-editor').value;
+    if (xmlContent) {
+        navigator.clipboard.writeText(xmlContent).then(() => {
+            showNotification('XML copied to clipboard!', 'success');
+        }).catch(() => {
+            showNotification('Failed to copy XML', 'error');
+        });
+    }
+}
+
+function downloadXML() {
+    const xmlContent = document.querySelector('.xml-editor').value;
+    if (xmlContent) {
+        const blob = new Blob([xmlContent], { type: 'text/xml' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'xml_content.xml';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        showNotification('XML downloaded successfully!', 'success');
+    }
+}
+
+function toggleFullscreen() {
+    const rightPanel = document.querySelector('.right-main-panel');
+    if (!document.fullscreenElement) {
+        rightPanel.requestFullscreen().then(() => {
+            showNotification('Entered fullscreen mode', 'info');
+        });
+    } else {
+        document.exitFullscreen().then(() => {
+            showNotification('Exited fullscreen mode', 'info');
+        });
+    }
+}
+
+// Tree zoom and fullscreen functions
+let currentZoom = 100;
+const minZoom = 50;
+const maxZoom = 200;
+const zoomStep = 25;
+
+function updateZoomDisplay() {
+    document.getElementById('zoomLevel').textContent = currentZoom + '%';
+    const treeContainer = document.querySelector('.tree-container');
+    treeContainer.style.setProperty('--zoom-scale', currentZoom / 100);
+    
+    if (currentZoom === 100) {
+        treeContainer.classList.remove('zoomed');
+    } else {
+        treeContainer.classList.add('zoomed');
+    }
+}
+
+function zoomIn() {
+    if (currentZoom < maxZoom) {
+        currentZoom += zoomStep;
+        updateZoomDisplay();
+        showNotification(`Zoom: ${currentZoom}%`, 'info');
+    }
+}
+
+function zoomOut() {
+    if (currentZoom > minZoom) {
+        currentZoom -= zoomStep;
+        updateZoomDisplay();
+        showNotification(`Zoom: ${currentZoom}%`, 'info');
+    }
+}
+
+function resetZoom() {
+    currentZoom = 100;
+    updateZoomDisplay();
+    showNotification('Zoom reset to 100%', 'info');
+}
+
+function toggleTreeFullscreen() {
+    const leftPanel = document.querySelector('.left-main-panel');
+    const isFullscreen = leftPanel.classList.contains('tree-fullscreen');
+    
+    if (!isFullscreen) {
+        // Enter fullscreen
+        leftPanel.classList.add('tree-fullscreen');
+        document.body.style.overflow = 'hidden';
+        
+        // Add exit button
+        const exitBtn = document.createElement('button');
+        exitBtn.className = 'exit-fullscreen';
+        exitBtn.innerHTML = '<i class="bi bi-fullscreen-exit"></i> Exit Fullscreen';
+        exitBtn.onclick = toggleTreeFullscreen;
+        leftPanel.appendChild(exitBtn);
+        
+        showNotification('Tree fullscreen mode', 'info');
+    } else {
+        // Exit fullscreen
+        leftPanel.classList.remove('tree-fullscreen');
+        document.body.style.overflow = '';
+        
+        // Remove exit button
+        const exitBtn = leftPanel.querySelector('.exit-fullscreen');
+        if (exitBtn) {
+            exitBtn.remove();
+        }
+        
+        showNotification('Exited tree fullscreen', 'info');
+    }
+}
+
+// Keyboard shortcuts for zoom
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+            case '=':
+            case '+':
+                e.preventDefault();
+                zoomIn();
+                break;
+            case '-':
+                e.preventDefault();
+                zoomOut();
+                break;
+            case '0':
+                e.preventDefault();
+                resetZoom();
+                break;
+        }
+    }
+    
+    // F11 for tree fullscreen
+    if (e.key === 'F11') {
+        e.preventDefault();
+        toggleTreeFullscreen();
+    }
+    
+    // Escape to exit fullscreen
+    if (e.key === 'Escape') {
+        const leftPanel = document.querySelector('.left-main-panel');
+        if (leftPanel.classList.contains('tree-fullscreen')) {
+            toggleTreeFullscreen();
+        }
+    }
+});
+
+// Mouse wheel zoom with Ctrl
+document.querySelector('.tree-container')?.addEventListener('wheel', function(e) {
+    if (e.ctrlKey) {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+            zoomIn();
+        } else {
+            zoomOut();
+        }
+    }
+});
+
+function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} position-fixed`;
+    notification.style.cssText = `
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 250px;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    notification.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+            ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Apply filter and close popup
+function applyAndCloseFilter() {
+    applyFilters();
+    toggleFilterPopup();
+}
+
+// Reset filters to default
+function resetFilters() {
+    // Reset all checkboxes to checked
+    document.getElementById('filterTestCase').checked = true;
+    document.getElementById('filterAction').checked = true;
+    document.getElementById('filterPreCondition').checked = true;
+    document.getElementById('filterPostCondition').checked = true;
+    document.getElementById('filterAttributes').checked = true;
+    document.getElementById('filterText').checked = true;
+    
+    // Reset preset to 'all'
+    document.querySelector('input[name="preset"][value="all"]').checked = true;
+    
+    // Apply reset
+    applyFilters();
+}
+
+// Expand/Collapse functions
+function expandAll() {
+    const allChildren = document.querySelectorAll('.tree-children');
+    const allToggles = document.querySelectorAll('.tree-toggle');
+    
+    allChildren.forEach(child => child.classList.remove('d-none'));
+    allToggles.forEach(toggle => {
+        if (toggle.classList.contains('bi-chevron-right')) {
+            toggle.classList.remove('bi-chevron-right');
+            toggle.classList.add('bi-chevron-down');
+        }
+    });
+}
+
+function collapseAll() {
+    const allChildren = document.querySelectorAll('.tree-children');
+    const allToggles = document.querySelectorAll('.tree-toggle');
+    
+    allChildren.forEach(child => child.classList.add('d-none'));
+    allToggles.forEach(toggle => {
+        if (toggle.classList.contains('bi-chevron-down')) {
+            toggle.classList.remove('bi-chevron-down');
+            toggle.classList.add('bi-chevron-right');
+        }
+    });
+}
+
+// Icon mapping
+function getIcon(tag) {
+    const icons = {
+        Project: "bi-diagram-3-fill text-info",
+        TestSuite: "bi-folder-fill text-warning",
+        TestCase: "bi-file-earmark-text text-primary",
+        PreCondition: "bi-gear-fill text-danger",
+        Action: "bi-play-circle-fill text-success",
+        PostCondition: "bi-check-circle-fill text-secondary",
+        Block: "bi-box text-primary",
+        Job: "bi-hourglass-split text-warning",
+        Wait: "bi-clock text-info",
+        IfThenElse: "bi-diagram-3 text-danger",
+        ThenBranch: "bi-arrow-right-circle text-success",
+        Variable: "bi-tag text-secondary"
+    };
+    return icons[tag] || "bi-circle text-muted";
+}
+
+// Build tree function
+function buildTree(node, path = []) {
+    if (!node) return '';
+
+    const hasAttributes = node.attributes && Object.keys(node.attributes).length > 0;
+    const hasChildren = node.children && node.children.length > 0;
+    const hasText = node.text && node.text.trim().length > 0;
+    const expandable = hasAttributes || hasChildren || hasText;
+
+    let html = `
+        <li data-path="${path.join('.')}">
+            <div class="tree-node"
+                data-path="${path.join('.')}"
+                onclick="onTreeNodeClick(event, this)">
+                
+                ${expandable
+                    ? '<i class="bi bi-chevron-down tree-toggle"></i>'
+                    : '<i class="bi bi-dash tree-toggle"></i>'}
+
+                <div class="tree-icon">
+                    <i class="bi ${getIcon(node.tag)}"></i>
+                </div>
+                <span class="tree-label">${node.tag}</span>
+                
+                ${hasText ? `<span class="tree-text">"${node.text}"</span>` : ''}
+            </div>
+    `;
+
+    if (expandable) {
+        html += `<ul class="tree-children">`;
+
+        // Attributes
+        if (hasAttributes) {
+            Object.entries(node.attributes).forEach(([key, value]) => {
+                html += `
+                    <li data-path="${path.join('.')}" data-attr="${key}">
+                        <div class="tree-node tree-attr" onclick="onTreeNodeClick(event, this)">
+                            <i class="bi bi-at text-secondary me-2"></i>
+                            <span class="tree-attr-key">@${key}</span>
+                            <span class="tree-attr-value">="${value}"</span>
+                        </div>
+                    </li>
+                `;
+            });
+        }
+
+        // Child elements
+        if (hasChildren) {
+            node.children.forEach((child, index) => {
+                html += buildTree(child, [...path, index]);
+            });
+        }
+
+        html += `</ul>`;
+    }
+
+    html += `</li>`;
+    return html;
+}
+
+// Click handler
+function onTreeNodeClick(e, el) {
+    e.stopPropagation();
+    selectedPath = el.dataset.path;
+    
+    // Highlight selected node
+    document.querySelectorAll(".tree-node").forEach(n => n.classList.remove("active"));
+    el.classList.add("active");
+
+    // Toggle expand/collapse
+    toggleNode(el);
+}
+
+// Toggle expand/collapse
+function toggleNode(el) {
+    const parentLi = el.closest("li");
+    const children = parentLi.querySelector(":scope > .tree-children");
+    const toggleIcon = el.querySelector(".tree-toggle");
+
+    if (!children || !toggleIcon) return;
+
+    children.classList.toggle("d-none");
+    
+    // Toggle Bootstrap icons
+    if (toggleIcon.classList.contains('bi-chevron-down')) {
+        toggleIcon.classList.remove('bi-chevron-down');
+        toggleIcon.classList.add('bi-chevron-right');
+    } else if (toggleIcon.classList.contains('bi-chevron-right')) {
+        toggleIcon.classList.remove('bi-chevron-right');
+        toggleIcon.classList.add('bi-chevron-down');
+    }
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tree with original data
+    const treeRoot = document.getElementById("xmlTreeRoot");
+    if (treeRoot && originalTreeState) {
+        treeRoot.innerHTML = buildTree(originalTreeState);
+    }
+    
+    // Setup search
+    setupSearch();
+    
+    // Setup filter popup close on outside click
+    document.addEventListener('click', function(event) {
+        const popup = document.getElementById('filterPopup');
+        const filterButton = event.target.closest('button[onclick="toggleFilterPopup()"]');
+        
+        if (popup && popup.style.display === 'flex' && !filterButton && !popup.contains(event.target)) {
+            popup.style.display = 'none';
+        }
+    });
+    
+    // Setup keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+            switch(e.key) {
+                case 'e':
+                    e.preventDefault();
+                    expandAll();
+                    break;
+                case 'w':
+                    e.preventDefault();
+                    collapseAll();
+                    break;
+                case 'f':
+                    e.preventDefault();
+                    document.getElementById('treeSearch').focus();
+                    break;
+            }
+        }
+    });
+    
+    // Debug: Log tree data
+    console.log('Tree data loaded:', originalTreeState);
+    console.log('Tree root element:', treeRoot);
+});
+</script>
+{% endblock %}

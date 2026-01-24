@@ -1,0 +1,1010 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+{% block title %}Test Suite Manager - Edit XML{% endblock title %}
+
+{% block style %} 
+<style>
+/* Hide the entire base navbar */
+nav.navbar {
+    display: none !important;
+}
+
+/* Ensure our enhanced navbar is visible */
+.enhanced-navbar {
+    display: flex !important;
+}
+
+/* Adjust body padding since navbar is hidden */
+body {
+    padding-top: 0 !important;
+}
+</style>
+
+<link rel="stylesheet" href="{% static 'css/xml_view.css' %}">
+
+{% endblock style %}
+
+{% block nav_links %}
+
+{% endblock nav_links %}
+
+{% block content %}
+
+<!-- Enhanced Navigation Bar -->
+<div class="enhanced-navbar">
+    <div class="navbar-section">
+        <div class="app-brand">
+            <i class="bi bi-diagram-3-fill brand-icon"></i>
+            <span class="brand-text">XML Suite Manager</span>
+            <span class="brand-badge" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border: 1px solid rgba(231, 76, 60, 0.3); box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);">Edit Mode</span>
+        </div>
+    </div>
+    
+    <div class="navbar-section">
+        <div class="nav-group">
+            <span class="nav-label">
+                <i class="bi bi-compass"></i>
+                Navigation
+            </span>
+            <a href="{% url 'load_xml' %}" class="nav-btn" title="Load XML File">
+                <i class="bi bi-file-earmark-arrow-up"></i>
+                <span>Load XML</span>
+            </a>
+            <a href="{% url 'xml_view' %}" class="nav-btn" title="View XML">
+                <i class="bi bi-eye"></i>
+                <span>View Mode</span>
+            </a>
+            <a href="{% url 'home' %}" class="nav-btn" title="Go to Home">
+                <i class="bi bi-house-door"></i>
+                <span>Home</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="navbar-section">
+        <div class="nav-group">
+            <span class="nav-label">
+                <i class="bi bi-tree"></i>
+                Tree Controls
+            </span>
+            <button class="nav-btn" onclick="expandAll()" title="Expand All Nodes">
+                <i class="bi bi-arrows-angle-expand"></i>
+                <span>Expand All</span>
+            </button>
+            <button class="nav-btn" onclick="collapseAll()" title="Collapse All Nodes">
+                <i class="bi bi-arrows-angle-contract"></i>
+                <span>Collapse All</span>
+            </button>
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out">
+                    <i class="bi bi-zoom-out"></i>
+                </button>
+                <span class="zoom-level" id="zoomLevel">100%</span>
+                <button class="zoom-btn" onclick="zoomIn()" title="Zoom In">
+                    <i class="bi bi-zoom-in"></i>
+                </button>
+                <button class="zoom-btn" onclick="resetZoom()" title="Reset Zoom">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </button>
+                <button class="nav-btn" onclick="toggleTreeFullscreen()" title="Tree Fullscreen">
+                    <i class="bi bi-fullscreen"></i>
+                    <span>Fullscreen</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="navbar-section">
+        <div class="nav-group">
+            <span class="nav-label">
+                <i class="bi bi-code-slash"></i>
+                Editor Tools
+            </span>
+            <button class="nav-btn" onclick="saveChanges()" title="Save Changes">
+                <i class="bi bi-save"></i>
+                <span>Save</span>
+            </button>
+            <button class="nav-btn" onclick="copyToClipboard()" title="Copy XML Content">
+                <i class="bi bi-clipboard-data"></i>
+                <span>Copy</span>
+            </button>
+            <button class="nav-btn" onclick="downloadXML()" title="Download XML File">
+                <i class="bi bi-download"></i>
+                <span>Download</span>
+            </button>
+            <button class="nav-btn" onclick="toggleFullscreen()" title="Editor Fullscreen">
+                <i class="bi bi-aspect-ratio"></i>
+                <span>Fullscreen</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Layout Container -->
+<div class="main-layout">
+    
+    <!-- Left Panel - XML Tree (No Header) -->
+    <div class="main-panel left-main-panel">
+        <div class="tree-section">
+            <div class="tree-controls">
+                <div class="tree-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search elements..." id="treeSearch">
+                </div>
+            </div>
+            
+            <div class="tree-container">
+                {% if tree_data %}
+                    <ul class="xml-tree" id="xmlTreeRoot">
+                        <!-- Tree will be populated by JavaScript -->
+                    </ul>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-file-earmark-x"></i>
+                        <h5>No XML Loaded</h5>
+                        <p>Please load an XML file to see the tree structure</p>
+                        <a href="{% url 'load_xml' %}" class="btn">
+                            <i class="bi bi-upload"></i> Load XML File
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel - XML Code Editor (No Header) -->
+    <div class="main-panel right-main-panel">
+        <div class="editor-section">
+            <div class="editor-wrapper">
+                <textarea class="xml-editor" id="xmlEditor" placeholder="XML code will appear here...">{{ xml_content|default:"" }}</textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Global tree state
+let treeState = {{ tree_data|safe }} || null;
+
+// Icon mapping for execution/behavior tree
+function getIcon(tag, attributes = {}) {
+    // Check for BlockPath to determine execution type
+    const blockPath = attributes.BlockPath || attributes.MappingName || '';
+    const mappingName = attributes.MappingName || '';
+    
+    // Semantic action detection based on MappingName or BlockPath
+    if (mappingName.includes('Execute') || blockPath.includes('JOB')) {
+        return "bi-play-circle-fill text-success"; // JOB-Execute
+    } else if (mappingName.includes('Write') || mappingName.includes('Set')) {
+        return "bi-pencil-fill text-warning"; // MODEL-Write
+    } else if (mappingName.includes('Read') || mappingName.includes('Get')) {
+        return "bi-eye-fill text-info"; // MODEL-Read
+    } else if (tag.includes('If') || tag.includes('Then') || tag.includes('Else')) {
+        return "bi-diagram-3-fill text-danger"; // IF logic
+    } else if (tag.includes('Wait') || mappingName.includes('Wait')) {
+        return "bi-clock-fill text-secondary"; // Wait actions
+    } else if (tag.includes('Block') || tag.includes('Subsystem')) {
+        return "bi-box-fill text-primary"; // Blocks/Subsystems
+    } else if (tag === 'Project') {
+        return "bi-diagram-3-fill text-dark"; // Project root
+    } else if (tag === 'TestSuite') {
+        return "bi-folder-fill text-warning"; // Test Suite
+    } else if (tag === 'TestCase') {
+        return "bi-file-earmark-text-fill text-primary"; // Test Case
+    } else if (tag === 'PreCondition') {
+        return "bi-gear-fill text-danger"; // Pre-conditions
+    } else if (tag === 'Action') {
+        return "bi-play-circle-fill text-success"; // Actions
+    } else if (tag === 'PostCondition') {
+        return "bi-check-circle-fill text-secondary"; // Post-conditions
+    } else if (tag === 'Metadata') {
+        return "bi-info-circle-fill text-info"; // Metadata
+    } else if (tag === 'Variable') {
+        return "bi-tag-fill text-muted"; // Variables
+    } else {
+        return "bi-circle-fill text-muted"; // Default
+    }
+}
+
+// Get semantic action type
+function getActionType(tag, attributes = {}) {
+    const mappingName = attributes.MappingName || '';
+    const blockPath = attributes.BlockPath || '';
+    
+    if (mappingName.includes('Execute') || blockPath.includes('JOB')) {
+        return 'execute';
+    } else if (mappingName.includes('Write') || mappingName.includes('Set')) {
+        return 'write';
+    } else if (mappingName.includes('Read') || mappingName.includes('Get')) {
+        return 'read';
+    } else if (tag.includes('If') || tag.includes('Then') || tag.includes('Else')) {
+        return 'logic';
+    } else if (tag.includes('Wait') || mappingName.includes('Wait')) {
+        return 'wait';
+    } else if (tag.includes('Block') || tag.includes('Subsystem')) {
+        return 'block';
+    } else if (tag === 'PreCondition') {
+        return 'precondition';
+    } else if (tag === 'Action') {
+        return 'action';
+    } else if (tag === 'PostCondition') {
+        return 'postcondition';
+    } else {
+        return 'general';
+    }
+}
+
+// Group children by BlockPath for execution tree structure
+function groupByBlockPath(children) {
+    if (!children || children.length === 0) return [];
+    
+    const groups = {};
+    const ungrouped = [];
+    
+    children.forEach(child => {
+        const blockPath = child.attributes?.BlockPath;
+        if (blockPath) {
+            // Extract the main folder path (before last '/')
+            const folderPath = blockPath.includes('/') ? 
+                blockPath.substring(0, blockPath.lastIndexOf('/')) : 'root';
+            
+            if (!groups[folderPath]) {
+                groups[folderPath] = {
+                    folderName: folderPath === 'root' ? 'Root Actions' : folderPath.split('/').pop(),
+                    children: []
+                };
+            }
+            groups[folderPath].children.push(child);
+        } else {
+            ungrouped.push(child);
+        }
+    });
+    
+    // Convert groups to array and add ungrouped items
+    const result = Object.values(groups);
+    if (ungrouped.length > 0) {
+        result.push({
+            folderName: 'Other Elements',
+            children: ungrouped
+        });
+    }
+    
+    return result;
+}
+
+// Enhanced build tree function for execution/behavior tree
+function buildTree(node, path = []) {
+    if (!node) return '';
+
+    const hasAttributes = node.attributes && Object.keys(node.attributes).length > 0;
+    const hasChildren = node.children && node.children.length > 0;
+    const hasText = node.text && node.text.trim().length > 0;
+    const expandable = hasAttributes || hasChildren || hasText;
+    
+    const actionType = getActionType(node.tag, node.attributes);
+    const blockPath = node.attributes?.BlockPath || '';
+    const mappingName = node.attributes?.MappingName || '';
+    
+    // Get attributes count and determine layout
+    const attributesCount = hasAttributes ? Object.keys(node.attributes).length : 0;
+    const showInlineAttributes = attributesCount === 1;
+    
+    // Build inline attributes HTML if only one attribute
+    let inlineAttributesHtml = '';
+    if (showInlineAttributes) {
+        const [key, value] = Object.entries(node.attributes)[0];
+        inlineAttributesHtml = `
+            <span class="tree-attr-inline ms-2">
+                <i class="bi bi-at text-secondary me-1"></i>
+                <span class="tree-attr-key">@${key}</span>
+                <span class="tree-attr-value">="${value}"</span>
+            </span>
+        `;
+    }
+    
+    let html = `
+        <li data-path="${path.join('.')}" data-action-type="${actionType}">
+            <div class="tree-node tree-node-${actionType}"
+                data-path="${path.join('.')}"
+                onclick="onTreeNodeClick(event, this)"
+                oncontextmenu="onTreeNodeContext(event, this)">
+                
+                ${expandable
+                    ? '<i class="bi bi-chevron-down tree-toggle me-1"></i>'
+                    : '<i class="bi bi-dash me-1"></i>'}
+
+                <span class="tree-label">${node.tag}</span>
+                
+                ${blockPath ? `<span class="tree-blockpath ms-2 text-muted small">[${blockPath}]</span>` : ''}
+                ${mappingName ? `<span class="tree-mapping ms-1 text-info small">→ ${mappingName}</span>` : ''}
+                ${hasText ? `<span class="tree-text ms-2 text-muted">"${node.text}"</span>` : ''}
+                ${inlineAttributesHtml}
+                
+                <span class="tree-node-actions ms-2">
+                    <button class="btn btn-sm btn-outline-success tree-add-btn" onclick="addChildElement(event, this)" title="Add child element">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-info tree-edit-btn" onclick="editElement(event, this)" title="Edit element">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger tree-delete-btn" onclick="deleteElement(event, this)" title="Delete element">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </span>
+            </div>
+    `;
+
+    if (expandable) {
+        html += `<ul class="tree-children">`;
+
+        // Attributes - only show as separate lines if more than 1 attribute
+        if (hasAttributes && !showInlineAttributes) {
+            Object.entries(node.attributes).forEach(([key, value]) => {
+                html += `
+                    <li data-path="${path.join('.')}" data-attr="${key}">
+                        <div class="tree-node tree-attr" onclick="onTreeNodeClick(event, this)">
+                            <i class="bi bi-at me-2 text-secondary"></i>
+                            <span class="tree-attr-key">@${key}</span>
+                            <span class="tree-attr-value">="${value}"</span>
+                            <span class="tree-node-actions ms-auto">
+                                <button class="btn btn-sm btn-outline-warning tree-edit-attr-btn" onclick="editAttribute(event, this, '${key}', '${value}', '${path.join('.')}');" title="Edit attribute">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger tree-delete-attr-btn" onclick="deleteAttribute(event, '${key}', '${path.join('.')}');" title="Delete attribute">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </li>
+                `;
+            });
+        }
+
+        // Children - Group by BlockPath for execution tree structure
+        if (hasChildren) {
+            const actionType = getActionType(node.tag, node.attributes);
+            
+            // For Action nodes, group children by BlockPath
+            if (actionType === 'action' && node.children.some(child => child.attributes?.BlockPath)) {
+                const groups = groupByBlockPath(node.children);
+                
+                groups.forEach(group => {
+                    html += `
+                        <li class="tree-folder">
+                            <div class="tree-node tree-folder-header">
+                                <i class="bi bi-folder-fill text-warning me-1"></i>
+                                <span class="tree-label">${group.folderName}</span>
+                                <span class="tree-count ms-2 badge bg-secondary">${group.children.length}</span>
+                            </div>
+                            <ul class="tree-children">
+                    `;
+                    
+                    group.children.forEach((child, index) => {
+                        html += buildTree(child, [...path, index]);
+                    });
+                    
+                    html += `
+                            </ul>
+                        </li>
+                    `;
+                });
+            } else {
+                // Regular tree structure for non-action nodes
+                node.children.forEach((child, index) => {
+                    html += buildTree(child, [...path, index]);
+                });
+            }
+        }
+
+        html += '</ul>';
+    }
+
+    html += '</li>';
+    return html;
+}
+
+// Click handler
+let selectedPath = null;
+
+function onTreeNodeClick(e, el) {
+    e.stopPropagation();
+    selectedPath = el.dataset.path;
+    
+    // Highlight selected node
+    document.querySelectorAll(".tree-node").forEach(n => n.classList.remove("active"));
+    el.classList.add("active");
+
+    // Toggle expand/collapse
+    toggleNode(el);
+}
+
+// Context menu handler
+function onTreeNodeContext(e, el) {
+    e.preventDefault();
+    e.stopPropagation();
+    selectedPath = el.dataset.path;
+    console.log("Right click on path:", selectedPath);
+}
+
+// Toggle expand/collapse
+function toggleNode(el) {
+    const parentLi = el.closest("li");
+    const children = parentLi.querySelector(":scope > .tree-children");
+    const toggleIcon = el.querySelector(".tree-toggle");
+
+    if (!children || !toggleIcon) return;
+
+    children.classList.toggle("d-none");
+    toggleIcon.classList.toggle("bi-chevron-down");
+    toggleIcon.classList.toggle("bi-chevron-right");
+}
+
+// Text editing function
+function editText(e, btn, currentText, path) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const newText = prompt("Edit text content:", currentText);
+    if (newText !== null) {
+        const node = getNodeByPath(path);
+        if (node) {
+            node.text = newText;
+            updateTreeAndXML();
+        }
+    }
+}
+
+// Get node by path
+function getNodeByPath(path) {
+    if (!path) return treeState;
+    const indices = path.split('.').filter(p => p !== '' && !isNaN(p)).map(Number);
+    let node = treeState;
+    
+    for (let idx of indices) {
+        if (node.children && node.children[idx]) {
+            node = node.children[idx];
+        } else {
+            return null;
+        }
+    }
+    return node;
+}
+
+// Edit element
+let currentEditPath = null;
+let editModal = null;
+
+function editElement(e, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const treeNode = btn.closest('.tree-node');
+    currentEditPath = treeNode.dataset.path;
+    const node = getNodeByPath(currentEditPath);
+    
+    if (!node) return;
+    
+    document.getElementById('elementNameInput').value = node.tag;
+    document.getElementById('elementValueInput').value = node.text || '';
+    
+    const attrContainer = document.getElementById('attributesContainer');
+    attrContainer.innerHTML = '';
+    
+    if (node.attributes && Object.keys(node.attributes).length > 0) {
+        Object.entries(node.attributes).forEach(([key, value]) => {
+            const attrRow = document.createElement('div');
+            attrRow.className = 'row mb-2 align-items-center';
+            attrRow.innerHTML = `
+                <div class="col-5">
+                    <input type="text" class="form-control form-control-sm attr-key" value="${key}" placeholder="Key">
+                </div>
+                <div class="col-5">
+                    <input type="text" class="form-control form-control-sm attr-value" value="${value}" placeholder="Value">
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.parentElement.parentElement.remove();">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            attrContainer.appendChild(attrRow);
+        });
+    }
+    
+    if (editModal) editModal.show();
+}
+
+// Edit attribute
+function editAttribute(e, btn, key, value, path) {
+    e.preventDefault();
+    e.stopPropagation();
+    const newValue = prompt(`Edit attribute "${key}":`, value);
+    if (newValue !== null) {
+        const node = getNodeByPath(path);
+        if (node && node.attributes) {
+            node.attributes[key] = newValue;
+            updateTreeAndXML();
+        }
+    }
+}
+
+// Delete attribute
+function deleteAttribute(e, key, path) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (confirm(`Delete attribute "${key}"?`)) {
+        const node = getNodeByPath(path);
+        if (node && node.attributes) {
+            delete node.attributes[key];
+            updateTreeAndXML();
+        }
+    }
+}
+
+// Delete element
+function deleteElement(e, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const treeNode = btn.closest('.tree-node');
+    const path = treeNode.dataset.path;
+    
+    if (!confirm('Delete this element and all its children?')) return;
+    
+    const pathIndices = path.split('.').filter(p => p !== '' && !isNaN(p)).map(Number);
+    if (pathIndices.length === 0) {
+        alert('Cannot delete root element');
+        return;
+    }
+    
+    const lastIdx = pathIndices.pop();
+    let parent = treeState;
+    
+    for (let idx of pathIndices) {
+        if (parent.children && parent.children[idx]) {
+            parent = parent.children[idx];
+        } else {
+            return;
+        }
+    }
+    
+    if (parent.children) {
+        parent.children.splice(lastIdx, 1);
+        updateTreeAndXML();
+    }
+}
+
+// Add child element
+function addChildElement(e, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const treeNode = btn.closest('.tree-node');
+    const path = treeNode.dataset.path;
+    const node = getNodeByPath(path);
+    
+    if (!node) return;
+    
+    // Show add element modal
+    document.getElementById('parentElementName').textContent = node.tag;
+    document.getElementById('newElementNameInput').value = '';
+    document.getElementById('newElementValueInput').value = '';
+    document.getElementById('newAttributesContainer').innerHTML = '';
+    
+    // Store the parent path for later use
+    window.currentParentPath = path;
+    
+    if (addModal) addModal.show();
+}
+
+// Update tree and XML
+function updateTreeAndXML() {
+    document.getElementById("xmlTreeRoot").innerHTML = buildTree(treeState);
+    const xmlString = treeToXML(treeState);
+    const xmlEditor = document.querySelector('.xml-editor');
+    if (xmlEditor) xmlEditor.value = xmlString;
+}
+
+// Tree to XML
+function treeToXML(node, indent = 0) {
+    const spaces = '  '.repeat(indent);
+    let xml = `${spaces}<${node.tag}`;
+    
+    if (node.attributes) {
+        Object.entries(node.attributes).forEach(([key, value]) => {
+            xml += ` ${key}="${value}"`;
+        });
+    }
+    
+    const hasChildren = node.children && node.children.length > 0;
+    const hasText = node.text && node.text.trim().length > 0;
+    
+    if (!hasChildren && !hasText) {
+        xml += ' />\n';
+    } else {
+        xml += '>';
+        if (hasText && !hasChildren) {
+            xml += node.text;
+        } else if (hasChildren) {
+            xml += '\n';
+            node.children.forEach(child => {
+                xml += treeToXML(child, indent + 1);
+            });
+            xml += spaces;
+        }
+        xml += `</${node.tag}>\n`;
+    }
+    return xml;
+}
+
+// Resizable panels functionality
+function initResizablePanels() {
+    const leftPanel = document.querySelector('.left-panel');
+    const rightPanel = document.querySelector('.right-panel');
+    const container = document.querySelector('.row');
+    
+    if (!leftPanel || !rightPanel || !container) return;
+
+    // Create resize handle
+    const resizeHandle = document.createElement('div');
+    resizeHandle.className = 'resize-handle';
+    leftPanel.style.position = 'relative';
+    leftPanel.appendChild(resizeHandle);
+
+    let isResizing = false;
+    let startX = 0;
+    let startLeftWidth = 0;
+
+    resizeHandle.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        startX = e.clientX;
+        startLeftWidth = leftPanel.offsetWidth;
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+
+        const deltaX = e.clientX - startX;
+        const containerWidth = container.offsetWidth;
+        let newLeftWidth = startLeftWidth + deltaX;
+
+        // Constrain to reasonable limits (20% - 80% of container)
+        const minWidth = containerWidth * 0.2;
+        const maxWidth = containerWidth * 0.8;
+
+        if (newLeftWidth < minWidth) newLeftWidth = minWidth;
+        if (newLeftWidth > maxWidth) newLeftWidth = maxWidth;
+
+        // Calculate percentages
+        const leftPercent = (newLeftWidth / containerWidth) * 100;
+        const rightPercent = 100 - leftPercent;
+
+        // Apply new widths
+        leftPanel.style.flex = `0 0 ${leftPercent}%`;
+        rightPanel.style.flex = `0 0 ${rightPercent}%`;
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (isResizing) {
+            isResizing = false;
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+        }
+    });
+}
+
+// Add modal variable
+let addModal = null;
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tree
+    const treeRoot = document.getElementById("xmlTreeRoot");
+    if (treeRoot && treeState) {
+        treeRoot.innerHTML = buildTree(treeState);
+    }
+
+    // Initialize resizable panels
+    initResizablePanels();
+
+    // Initialize modals
+    editModal = new bootstrap.Modal(document.getElementById('editElementModal'));
+    addModal = new bootstrap.Modal(document.getElementById('addElementModal'));
+
+    // Handle add attribute button
+    document.getElementById('addAttrBtn').addEventListener('click', function() {
+        const attrContainer = document.getElementById('attributesContainer');
+        const attrRow = document.createElement('div');
+        attrRow.className = 'row mb-2 align-items-center';
+        attrRow.innerHTML = `
+            <div class="col-5">
+                <input type="text" class="form-control form-control-sm attr-key" placeholder="Key">
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control form-control-sm attr-value" placeholder="Value">
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.parentElement.parentElement.remove();">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+        attrContainer.appendChild(attrRow);
+    });
+
+    // Handle add new attribute button
+    document.getElementById('addNewAttrBtn').addEventListener('click', function() {
+        const attrContainer = document.getElementById('newAttributesContainer');
+        const attrRow = document.createElement('div');
+        attrRow.className = 'row mb-2 align-items-center';
+        attrRow.innerHTML = `
+            <div class="col-5">
+                <input type="text" class="form-control form-control-sm attr-key" placeholder="Key">
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control form-control-sm attr-value" placeholder="Value">
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.parentElement.parentElement.remove();">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+        attrContainer.appendChild(attrRow);
+    });
+
+    // Handle save element button
+    document.getElementById('saveElementBtn').addEventListener('click', function() {
+        if (!currentEditPath) return;
+        const node = getNodeByPath(currentEditPath);
+        if (!node) return;
+        
+        const newName = document.getElementById('elementNameInput').value.trim();
+        if (newName && newName !== node.tag) node.tag = newName;
+        
+        node.text = document.getElementById('elementValueInput').value;
+        node.attributes = {};
+        document.querySelectorAll('#attributesContainer .row').forEach(row => {
+            const key = row.querySelector('.attr-key').value.trim();
+            const value = row.querySelector('.attr-value').value.trim();
+            if (key) node.attributes[key] = value;
+        });
+        
+        updateTreeAndXML();
+        editModal.hide();
+    });
+
+    // Handle delete element button
+    document.getElementById('deleteElementBtn').addEventListener('click', function() {
+        if (!currentEditPath) return;
+        
+        const pathIndices = currentEditPath.split('.').filter(p => p !== '' && !isNaN(p)).map(Number);
+        if (pathIndices.length === 0) {
+            alert('Cannot delete root element');
+            return;
+        }
+        
+        if (!confirm('Delete this element and all its children?')) return;
+        
+        const lastIdx = pathIndices.pop();
+        let parent = treeState;
+        
+        for (let idx of pathIndices) {
+            if (parent.children && parent.children[idx]) {
+                parent = parent.children[idx];
+            } else {
+                return;
+            }
+        }
+        
+        if (parent.children) {
+            parent.children.splice(lastIdx, 1);
+            updateTreeAndXML();
+            editModal.hide();
+        }
+    });
+
+    // Handle create element button
+    document.getElementById('createElementBtn').addEventListener('click', function() {
+        const parentPath = window.currentParentPath;
+        if (!parentPath && parentPath !== '0') return;
+        
+        const parent = getNodeByPath(parentPath);
+        if (!parent) return;
+        
+        const elementName = document.getElementById('newElementNameInput').value.trim();
+        if (!elementName) {
+            alert('Element name is required');
+            return;
+        }
+        
+        // Create new element
+        const newElement = {
+            tag: elementName,
+            text: document.getElementById('newElementValueInput').value,
+            attributes: {},
+            children: []
+        };
+        
+        // Add attributes
+        document.querySelectorAll('#newAttributesContainer .row').forEach(row => {
+            const key = row.querySelector('.attr-key').value.trim();
+            const value = row.querySelector('.attr-value').value.trim();
+            if (key) newElement.attributes[key] = value;
+        });
+        
+        // Initialize children array if needed
+        if (!parent.children) parent.children = [];
+        parent.children.push(newElement);
+        
+        updateTreeAndXML();
+        addModal.hide();
+    });
+});
+
+
+function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} position-fixed`;
+    notification.style.cssText = `
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 250px;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    notification.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+            ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Add missing functions for edit page
+function setupSearch() {
+    const searchInput = document.getElementById('treeSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            filterTree(searchTerm);
+        });
+    }
+}
+
+function filterTree(searchTerm) {
+    const allNodes = document.querySelectorAll('.tree-node');
+    
+    allNodes.forEach(node => {
+        const label = node.querySelector('.tree-label');
+        if (label) {
+            const text = label.textContent.toLowerCase();
+            const parentLi = node.closest('li');
+            
+            if (searchTerm === '' || text.includes(searchTerm)) {
+                parentLi.style.display = '';
+                // Show parents
+                let parent = parentLi.parentElement;
+                while (parent && parent.classList.contains('tree-children')) {
+                    parent.style.display = '';
+                    parent = parent.parentElement.parentElement;
+                }
+            } else {
+                parentLi.style.display = 'none';
+            }
+        }
+    });
+}
+
+function expandAll() {
+    const allChildren = document.querySelectorAll('.tree-children');
+    const allToggles = document.querySelectorAll('.tree-toggle');
+    
+    allChildren.forEach(child => child.classList.remove('d-none'));
+    allToggles.forEach(toggle => {
+        if (toggle.classList.contains('bi-chevron-right')) {
+            toggle.classList.remove('bi-chevron-right');
+            toggle.classList.add('bi-chevron-down');
+        }
+    });
+}
+
+function collapseAll() {
+    const allChildren = document.querySelectorAll('.tree-children');
+    const allToggles = document.querySelectorAll('.tree-toggle');
+    
+    allChildren.forEach(child => child.classList.add('d-none'));
+    allToggles.forEach(toggle => {
+        if (toggle.classList.contains('bi-chevron-down')) {
+            toggle.classList.remove('bi-chevron-down');
+            toggle.classList.add('bi-chevron-right');
+        }
+    });
+}
+
+function saveChanges() {
+    const editorContent = document.getElementById('xmlEditor').value;
+    console.log('Saving changes...');
+    showNotification('Changes saved successfully!', 'success');
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tree
+    const treeRoot = document.getElementById("xmlTreeRoot");
+    if (treeRoot && treeState) {
+        treeRoot.innerHTML = buildTree(treeState);
+    }
+    
+    // Setup search
+    setupSearch();
+    
+    // Setup keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+            switch(e.key) {
+                case 'e':
+                    e.preventDefault();
+                    expandAll();
+                    break;
+                case 'w':
+                    e.preventDefault();
+                    collapseAll();
+                    break;
+                case 'f':
+                    e.preventDefault();
+                    document.getElementById('treeSearch').focus();
+                    break;
+                case 's':
+                    e.preventDefault();
+                    saveChanges();
+                    break;
+            }
+        }
+    });
+});
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+{% endblock content %}

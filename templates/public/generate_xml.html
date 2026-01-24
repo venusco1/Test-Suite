@@ -1,0 +1,546 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Generate XML - Test Suite Manager{% endblock %}
+
+{% block content %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<div class="generate-container">
+    <!-- Header Section -->
+    <section class="generate-header">
+        <div class="header-content">
+            <a href="{% url 'home' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+            <div class="header-text">
+                <h1><i class="fas fa-plus-circle"></i> Generate XML Test Case</h1>
+                <p>Create a new XML test case with our structured template</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="generate-form-section">
+        <div class="form-container">
+            <form method="POST" id="generateForm">
+                {% csrf_token %}
+                
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="title">
+                                <i class="fas fa-heading"></i> Test Case Title *
+                            </label>
+                            <input type="text" id="title" name="title" required 
+                                   placeholder="e.g., User Authentication Test">
+                            <small>Enter a descriptive title for your test case</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="test_suite_name">
+                                <i class="fas fa-folder"></i> Test Suite Name
+                            </label>
+                            <input type="text" id="test_suite_name" name="test_suite_name" 
+                                   value="Authentication Tests" 
+                                   placeholder="e.g., Authentication Tests">
+                            <small>Group related test cases under a suite</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="test_case_name">
+                                <i class="fas fa-vial"></i> Test Case Name
+                            </label>
+                            <input type="text" id="test_case_name" name="test_case_name" 
+                                   value="Login_Test" 
+                                   placeholder="e.g., Login_Test">
+                            <small>Technical name for the test case</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template Options -->
+                <div class="form-section">
+                    <h3><i class="fas fa-cogs"></i> Template Options</h3>
+                    <div class="template-options">
+                        <div class="option-card selected" data-template="basic">
+                            <div class="option-header">
+                                <i class="fas fa-check-circle"></i>
+                                <h4>Basic Template</h4>
+                            </div>
+                            <p>Standard test case structure with PreCondition, Action, and PostCondition</p>
+                            <ul>
+                                <li>Test environment setup</li>
+                                <li>Main test logic</li>
+                                <li>Cleanup procedures</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="option-card" data-template="advanced">
+                            <div class="option-header">
+                                <i class="fas fa-circle"></i>
+                                <h4>Advanced Template</h4>
+                            </div>
+                            <p>Extended template with additional features</p>
+                            <ul>
+                                <li>Error handling</li>
+                                <li>Data validation</li>
+                                <li>Performance metrics</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-eye"></i> XML Preview</h3>
+                    <div class="preview-container">
+                        <div class="preview-header">
+                            <span>Generated XML Structure</span>
+                            <button type="button" class="preview-toggle" onclick="togglePreview()">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <div class="preview-content" id="xmlPreview">
+                            <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Project&gt;
+    &lt;TestSuite Name="Authentication Tests"&gt;
+        &lt;TestCase Name="Login_Test"&gt;
+            &lt;Metadata&gt;
+                &lt;SavedVariables&gt;
+                    &lt;Variable Index="1"&gt;MEASUREMENT_STATE&lt;/Variable&gt;
+                    &lt;Variable Index="2"&gt;TEST_RESULT&lt;/Variable&gt;
+                &lt;/SavedVariables&gt;
+            &lt;/Metadata&gt;
+            &lt;PreCondition&gt;
+                &lt;!-- Test environment setup --&gt;
+            &lt;/PreCondition&gt;
+            &lt;Action&gt;
+                &lt;!-- Main test logic --&gt;
+            &lt;/Action&gt;
+            &lt;PostCondition&gt;
+                &lt;!-- Cleanup procedures --&gt;
+            &lt;/PostCondition&gt;
+        &lt;/TestCase&gt;
+    &lt;/TestSuite&gt;
+&lt;/Project&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-magic"></i> Generate XML
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .generate-container {
+        min-height: 100vh;
+    }
+
+    /* Header Section */
+    .generate-header {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        padding: 40px 20px;
+        color: white;
+    }
+
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        text-decoration: none;
+        margin-bottom: 20px;
+        font-weight: 600;
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+    }
+
+    .back-btn:hover {
+        opacity: 1;
+    }
+
+    .header-text h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        font-weight: 800;
+    }
+
+    .header-text p {
+        font-size: 1.1em;
+        opacity: 0.9;
+        font-weight: 500;
+    }
+
+    /* Form Section */
+    .generate-form-section {
+        padding: 40px 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .form-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .form-section {
+        padding: 30px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .form-section:last-child {
+        border-bottom: none;
+    }
+
+    .form-section h3 {
+        color: #1f2937;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-section h3 i {
+        color: #6366f1;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        color: #374151;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95em;
+    }
+
+    .form-group label i {
+        color: #6b7280;
+        font-size: 0.9em;
+    }
+
+    .form-group input {
+        padding: 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #6366f1;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-group small {
+        color: #6b7280;
+        font-size: 0.85em;
+        margin-top: 6px;
+    }
+
+    /* Template Options */
+    .template-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .option-card {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+    }
+
+    .option-card:hover {
+        border-color: #6366f1;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+    }
+
+    .option-card.selected {
+        border-color: #6366f1;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8efff 100%);
+    }
+
+    .option-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .option-header i {
+        color: #6b7280;
+        font-size: 1.2em;
+    }
+
+    .option-card.selected .option-header i {
+        color: #10b981;
+    }
+
+    .option-header h4 {
+        color: #1f2937;
+        font-weight: 700;
+        font-size: 1.1em;
+    }
+
+    .option-card p {
+        color: #6b7280;
+        margin-bottom: 12px;
+        line-height: 1.5;
+    }
+
+    .option-card ul {
+        list-style: none;
+    }
+
+    .option-card li {
+        color: #6b7280;
+        padding: 4px 0;
+        font-size: 0.9em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .option-card li::before {
+        content: "✓";
+        color: #10b981;
+        font-weight: bold;
+    }
+
+    /* Preview Section */
+    .preview-container {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .preview-header {
+        background: #f9fafb;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .preview-header span {
+        color: #374151;
+        font-weight: 600;
+        font-size: 0.95em;
+    }
+
+    .preview-toggle {
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .preview-toggle:hover {
+        background: #e5e7eb;
+        color: #374151;
+    }
+
+    .preview-content {
+        max-height: 400px;
+        overflow-y: auto;
+        background: #1f2937;
+    }
+
+    .preview-content pre {
+        margin: 0;
+        padding: 20px;
+        color: #e5e7eb;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        line-height: 1.5;
+        overflow-x: auto;
+    }
+
+    .preview-content code {
+        color: #10b981;
+    }
+
+    /* Action Buttons */
+    .form-actions {
+        padding: 30px;
+        display: flex;
+        gap: 16px;
+        justify-content: flex-end;
+        background: #f9fafb;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.95em;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-secondary {
+        background: #e5e7eb;
+        color: #374151;
+    }
+
+    .btn-secondary:hover {
+        background: #d1d5db;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .generate-header {
+            padding: 30px 16px;
+        }
+
+        .header-text h1 {
+            font-size: 2em;
+        }
+
+        .generate-form-section {
+            padding: 20px 16px;
+        }
+
+        .form-section {
+            padding: 20px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .template-options {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    // Template selection
+    document.querySelectorAll('.option-card').forEach(card => {
+        card.addEventListener('click', function() {
+            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+
+    // Live preview update
+    function updatePreview() {
+        const title = document.getElementById('title').value || 'Untitled Test';
+        const testSuite = document.getElementById('test_suite_name').value || 'Default Suite';
+        const testCase = document.getElementById('test_case_name').value || 'Default_Test';
+        
+        // Update preview (simplified for demo)
+        const preview = document.getElementById('xmlPreview');
+        // You can implement real-time preview update here
+    }
+
+    // Add event listeners for live preview
+    document.getElementById('title').addEventListener('input', updatePreview);
+    document.getElementById('test_suite_name').addEventListener('input', updatePreview);
+    document.getElementById('test_case_name').addEventListener('input', updatePreview);
+
+    function togglePreview() {
+        const preview = document.querySelector('.preview-content');
+        const icon = document.querySelector('.preview-toggle i');
+        
+        if (preview.style.maxHeight === 'none') {
+            preview.style.maxHeight = '400px';
+            icon.className = 'fas fa-expand';
+        } else {
+            preview.style.maxHeight = 'none';
+            icon.className = 'fas fa-compress';
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('generateForm').reset();
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        document.querySelector('.option-card[data-template="basic"]').classList.add('selected');
+    }
+</script>
+
+{% endblock %}
